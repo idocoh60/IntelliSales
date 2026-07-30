@@ -256,12 +256,41 @@ async function renderPerformanceTab() {
   charts.regressorPerm = barChart("regressorPermChart", m.regressor.permutation_importance, true, 1);
 
   document.getElementById("segmentExplainerNote").innerHTML =
-    `בדוח ה-Modelling הנחנו שסגמנט הלקוח (<code>CustomerCategoryID</code>) הוא המנבא החזק ביותר, ושחודש ההזמנה (<code>OrderMonth</code>)
-    משמעותי בזיהוי עונתיות. בפועל, גם ב-Mean Decrease Impurity וגם ב-Permutation Importance (מדד לא מוטה לפי כמות ערכים -
-    ר' תיעוד ב-<code>ml/train.py</code>) שני הפיצ'רים האלה יוצאים כמעט חסרי השפעה בשני המודלים, בעוד ש-<code>StockItemID</code>
-    ו-<code>ActualUnitPrice</code> דומיננטיים בהרבה. ההסבר הסביר: זהות המוצר והמחיר כבר "לוכדים" בעקיפין את רוב המידע שסגמנט הלקוח
-    היה תורם (סגמנטים שונים נוטים לקנות מוצרים/במחירים שונים), כך שברגע שהמודל יודע מה נקנה ובאיזה מחיר - הסגמנט כמעט לא מוסיף
-    מידע נוסף. זהו ממצא אמפירי אמיתי שנבדק בשתי שיטות שונות, לא פגם בקוד.`;
+    `בדוח ה-Modelling הנחנו שסגמנט הלקוח הוא המנבא החזק ביותר לכמות, ושחודש ההזמנה מרכזי לזיהוי עונתיות. נבדק בשלוש שיטות
+    בלתי-תלויות: חשיבות פיצ'רים בתוך המודלים (למעלה), ו-ANOVA חד-כיווני ישירות על הנתונים הגולמיים (למטה, בלי שום מודל
+    בין) - כל השלוש מסכימות ששתי ההנחות לא מתאשרות: ה-eta squared (אחוז השונות בכמות שמוסבר על ידי הסגמנט/החודש לבדו)
+    כמעט אפסי בשני המקרים. ה-p-value "מובהק" רק בגלל גודל המדגם העצום (458,270 שורות) - עם מדגם כזה, גם הבדל זעיר וחסר
+    משמעות עסקית יוצא "מובהק סטטיסטית". ההסבר הסביר לממצא: זהות המוצר והמחיר כבר לוכדים בעקיפין את רוב המידע שסגמנט
+    הלקוח היה תורם, כך שברגע שהמודל יודע מה נקנה ובאיזה מחיר - הסגמנט כמעט לא מוסיף מידע נוסף.`;
+
+  function renderAnovaBlock(statsElId, chartId, check) {
+    document.getElementById(statsElId).innerHTML = `
+      <div class="metric-pill"><span>eta²</span><strong>${check.eta_squared.toExponential(2)}</strong></div>
+      <div class="metric-pill"><span>F-statistic</span><strong>${check.f_statistic.toFixed(2)}</strong></div>
+      <div class="metric-pill"><span>p-value</span><strong>${check.p_value.toExponential(2)}</strong></div>
+    `;
+    const labels = Object.keys(check.group_means);
+    const values = Object.values(check.group_means);
+    const range = Math.max(...values) - Math.min(...values);
+    const mid = (Math.max(...values) + Math.min(...values)) / 2;
+    return new Chart(document.getElementById(chartId), {
+      type: "bar",
+      data: { labels, datasets: [{ data: values, backgroundColor: seriesColor(3) }] },
+      options: {
+        ...baseChartOptions({}),
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: textColor() }, grid: { color: gridColor() } },
+          // Zoomed y-axis - the point is exactly that these bars are all
+          // nearly the same height despite the zoom, unlike a real effect.
+          y: { min: Math.max(0, mid - range * 4), max: mid + range * 4, ticks: { color: textColor() }, grid: { color: gridColor() } },
+        },
+      },
+    });
+  }
+
+  charts.segmentMeans = renderAnovaBlock("segmentAnovaStats", "segmentMeansChart", m.bivariate_check.customer_segment);
+  charts.monthMeans = renderAnovaBlock("monthAnovaStats", "monthMeansChart", m.bivariate_check.order_month);
 }
 
 // ---------- Insights tab ----------

@@ -129,8 +129,20 @@
     </div>
 
     <div class="card full-width">
-      <h2>סגמנט לקוח ועונתיות - למה החשיבות שלהם נמוכה?</h2>
+      <h2>בדיקת הנחות הסגמנטציה והעונתיות מהדוח (ANOVA עצמאי, בלי מודל)</h2>
       <p class="muted" id="segmentExplainerNote"></p>
+      <div class="grid-2">
+        <div>
+          <h3>ממוצע כמות לפי סגמנט לקוח</h3>
+          <div class="metric-row" id="segmentAnovaStats"></div>
+          <div class="chart-box small"><canvas id="segmentMeansChart"></canvas></div>
+        </div>
+        <div>
+          <h3>ממוצע כמות לפי חודש הזמנה</h3>
+          <div class="metric-row" id="monthAnovaStats"></div>
+          <div class="chart-box small"><canvas id="monthMeansChart"></canvas></div>
+        </div>
+      </div>
     </div>
   </section>
 

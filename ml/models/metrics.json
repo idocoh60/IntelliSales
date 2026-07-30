@@ -83,5 +83,38 @@
   "dataset": {
     "rows_used_for_training": 458270,
     "median_quantity": 9.0
+  },
+  "bivariate_check": {
+    "customer_segment": {
+      "f_statistic": 2.743279332717432,
+      "p_value": 0.02686902631656907,
+      "eta_squared": 2.3944343527823517e-05,
+      "group_means": {
+        "Computer Store": 31.47,
+        "Corporate": 31.68,
+        "Gift Store": 31.65,
+        "Novelty Shop": 32.1,
+        "Supermarket": 32.37
+      }
+    },
+    "order_month": {
+      "f_statistic": 4.211030064242108,
+      "p_value": 2.8389947224979046e-06,
+      "eta_squared": 0.00010107111923397677,
+      "group_means": {
+        "1": 31.76,
+        "2": 31.71,
+        "3": 32.25,
+        "4": 32.59,
+        "5": 32.91,
+        "6": 31.66,
+        "7": 32.12,
+        "8": 32.05,
+        "9": 31.28,
+        "10": 31.53,
+        "11": 32.21,
+        "12": 31.63
+      }
+    }
   }
 }

@@ -46,6 +46,7 @@ import sqlite3
 import joblib
 import numpy as np
 import pandas as pd
+from scipy import stats
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.inspection import permutation_importance
 from sklearn.metrics import (
@@ -180,6 +181,36 @@ def train_models(df: pd.DataFrame):
     return classifier, regressor, metrics, median_qty
 
 
+def one_way_anova_eta_squared(df: pd.DataFrame, group_col: str, value_col: str = "Quantity") -> dict:
+    """
+    Independent check of the Modelling report's segment/seasonality
+    assumptions, using plain one-way ANOVA on the raw data - no model,
+    no cardinality bias, just: does group membership explain variance in
+    Quantity at all? eta squared = SS_between / SS_total is the standard
+    effect-size measure (0 = no effect, ~0.01 small, ~0.06 medium, ~0.14+
+    large, per Cohen's conventions). With 458k rows, even a trivial true
+    effect will show up as "statistically significant" (tiny p-value), so
+    eta squared - not the p-value - is what actually answers the question.
+    """
+    groups = [g[value_col].values for _, g in df.groupby(group_col)]
+    f_stat, p_value = stats.f_oneway(*groups)
+
+    grand_mean = df[value_col].mean()
+    ss_between = sum(len(g) * (g.mean() - grand_mean) ** 2 for g in (gr[value_col] for _, gr in df.groupby(group_col)))
+    ss_total = ((df[value_col] - grand_mean) ** 2).sum()
+    eta_squared = ss_between / ss_total
+
+    group_means = df.groupby(group_col)[value_col].mean().round(2).to_dict()
+    group_means = {str(k): float(v) for k, v in group_means.items()}
+
+    return {
+        "f_statistic": float(f_stat),
+        "p_value": float(p_value),
+        "eta_squared": float(eta_squared),
+        "group_means": group_means,
+    }
+
+
 def build_segment_recommendations(df: pd.DataFrame, top_n: int = 10) -> dict:
     recs = {}
     for cat_id, group in df.groupby("CustomerCategoryID"):
@@ -219,6 +250,15 @@ def main():
     classifier, regressor, metrics, median_qty = train_models(df)
     recs = build_segment_recommendations(df)
     reference = build_reference_data(df)
+
+    # Independent, model-free check of the Modelling report's segmentation
+    # and seasonality assumptions (see one_way_anova_eta_squared docstring).
+    df_month = df.copy()
+    df_month["OrderMonth"] = pd.to_datetime(df_month["OrderDate"]).dt.month
+    metrics["bivariate_check"] = {
+        "customer_segment": one_way_anova_eta_squared(df, "CustomerCategoryName"),
+        "order_month": one_way_anova_eta_squared(df_month, "OrderMonth"),
+    }
 
     joblib.dump(classifier, os.path.join(MODELS_DIR, "classifier.pkl"))
     joblib.dump(regressor, os.path.join(MODELS_DIR, "regressor.pkl"))
