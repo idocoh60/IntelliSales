@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IntelliSales &mdash; דשבורד נציג מכירות</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">IS</span>
+    <div class="brand-text">
+      <strong>IntelliSales</strong>
+      <span>מערכת תמיכת החלטה לנציגי מכירות</span>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button class="tab-btn active" data-tab="predict">תחזית חדשה</button>
+    <button class="tab-btn" data-tab="performance">ביצועי המודל</button>
+    <button class="tab-btn" data-tab="insights">תובנות נתונים</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ============ TAB: PREDICT ============ -->
+  <section id="tab-predict" class="tab-panel active">
+    <div class="grid-2">
+
+      <div class="card form-card">
+        <h2>הזנת תצפית חדשה</h2>
+        <p class="muted">בחרו סגמנט לקוח ומוצר כדי לקבל המלצת מכירה בזמן אמת.</p>
+
+        <label for="customerCategory">סגמנט לקוח</label>
+        <select id="customerCategory"></select>
+
+        <label for="stockItem">מוצר</label>
+        <input list="productList" id="stockItemSearch" placeholder="חפשו מוצר...">
+        <datalist id="productList"></datalist>
+        <input type="hidden" id="stockItem">
+
+        <label for="unitPrice">מחיר יחידה מוצע (₪)</label>
+        <input type="number" id="unitPrice" step="0.01">
+
+        <label for="orderMonth">חודש ההזמנה</label>
+        <select id="orderMonth"></select>
+
+        <button id="predictBtn" class="primary-btn">חשב תחזית</button>
+        <p id="formError" class="error-text"></p>
+      </div>
+
+      <div class="card result-card" id="resultCard" hidden>
+        <h2>דוח תחזית</h2>
+
+        <div class="result-grid">
+          <div class="stat-tile">
+            <span class="stat-label">סיכוי לעסקה משמעותית</span>
+            <span class="stat-value" id="probabilityValue">&mdash;</span>
+            <span class="stat-sub" id="baselineNote"></span>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-label">כמות מומלצת להזמנה</span>
+            <span class="stat-value" id="quantityValue">&mdash;</span>
+            <span class="stat-sub">יחידות</span>
+          </div>
+        </div>
+
+        <h3>סימולציית הנחות</h3>
+        <table class="discount-table">
+          <thead>
+            <tr><th>הנחה</th><th>מחיר לאחר הנחה</th><th>סיכוי סגירה</th><th>המלצה</th></tr>
+          </thead>
+          <tbody id="discountTableBody"></tbody>
+        </table>
+
+        <h3>המלצת Cross-sell</h3>
+        <div class="cross-sell-card" id="crossSellCard">&mdash;</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ TAB: PERFORMANCE ============ -->
+  <section id="tab-performance" class="tab-panel">
+    <div class="grid-2">
+      <div class="card">
+        <h2>מודל הסיווג (Random Forest Classifier)</h2>
+        <p class="muted" id="classifierTargetDef"></p>
+        <div class="metric-row">
+          <div class="metric-pill"><span>Accuracy</span><strong id="metricAccuracy"></strong></div>
+          <div class="metric-pill"><span>Precision</span><strong id="metricPrecision"></strong></div>
+          <div class="metric-pill"><span>Recall</span><strong id="metricRecall"></strong></div>
+          <div class="metric-pill"><span>AUC</span><strong id="metricAuc"></strong></div>
+        </div>
+        <div class="chart-box"><canvas id="confusionChart"></canvas></div>
+      </div>
+
+      <div class="card">
+        <h2>מודל הרגרסיה (Random Forest Regressor)</h2>
+        <p class="muted" id="regressorTargetDef"></p>
+        <div class="metric-row">
+          <div class="metric-pill"><span>MAE</span><strong id="metricMae"></strong></div>
+          <div class="metric-pill"><span>ממוצע כמות</span><strong id="metricMeanQty"></strong></div>
+        </div>
+        <div class="chart-box"><canvas id="featureImportanceChart"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TAB: INSIGHTS ============ -->
+  <section id="tab-insights" class="tab-panel">
+    <div class="grid-2">
+      <div class="card"><h2>התפלגות סכום שורת הזמנה</h2><div class="chart-box"><canvas id="orderValueChart"></canvas></div></div>
+      <div class="card"><h2>מכירות לפי קטגוריה</h2><div class="chart-box"><canvas id="categoryChart"></canvas></div></div>
+      <div class="card"><h2>10 המוצרים המובילים במכירות</h2><div class="chart-box"><canvas id="topProductsChart"></canvas></div></div>
+      <div class="card"><h2>מגמת מכירות לאורך זמן</h2><div class="chart-box"><canvas id="trendChart"></canvas></div></div>
+      <div class="card full-width"><h2>מכירות מול הכנסה חציונית לפי מדינה</h2><div class="chart-box"><canvas id="incomeScatterChart"></canvas></div></div>
+    </div>
+  </section>
+
+</main>
+
+<script src="{{ url_for('static', filename='js/vendor/chart.umd.js') }}"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+{
+  "classifier": {
+    "target_definition": "Quantity > median (9.0 units)",
+    "accuracy": 0.9384642241473368,
+    "precision": 0.9987328283846442,
+    "recall": 0.8610552451893234,
+    "auc": 0.9415832554774937,
+    "confusion_matrix": [
+      [
+        51335,
+        44
+      ],
+      [
+        5596,
+        34679
+      ]
+    ],
+    "feature_importance": {
+      "CustomerCategoryID": 0.0013,
+      "StockItemID": 0.5259,
+      "ActualUnitPrice": 0.3815,
+      "DiscountPercentage": 0.0893,
+      "OrderMonth": 0.0021
+    },
+    "global_baseline": 0.4394287210596373
+  },
+  "regressor": {
+    "target_definition": "Quantity (units per order line)",
+    "mae": 14.455500799074679,
+    "feature_importance": {
+      "CustomerCategoryID": 0.0045,
+      "StockItemID": 0.3735,
+      "ActualUnitPrice": 0.6004,
+      "DiscountPercentage": 0.0154,
+      "OrderMonth": 0.0062
+    },
+    "mean_quantity": 32.0179893948982
+  },
+  "dataset": {
+    "rows_used_for_training": 458270,
+    "median_quantity": 9.0
+  }
+}

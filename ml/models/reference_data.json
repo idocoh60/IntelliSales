@@ -1,0 +1,1388 @@
+{
+  "customer_categories": [
+    {
+      "CustomerCategoryID": 3,
+      "CustomerCategoryName": "Novelty Shop"
+    },
+    {
+      "CustomerCategoryID": 4,
+      "CustomerCategoryName": "Supermarket"
+    },
+    {
+      "CustomerCategoryID": 5,
+      "CustomerCategoryName": "Computer Store"
+    },
+    {
+      "CustomerCategoryID": 6,
+      "CustomerCategoryName": "Gift Store"
+    },
+    {
+      "CustomerCategoryID": 7,
+      "CustomerCategoryName": "Corporate"
+    }
+  ],
+  "products": [
+    {
+      "StockItemID": 97,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (Black) 3XL",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 89,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (Black) 3XS",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 98,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (Black) 4XL",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 99,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (Black) 5XL",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 100,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (Black) 6XL",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 101,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (Black) 7XL",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 94,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (Black) L",
+      "Category": "T-Shirts",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 93,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (Black) M",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 92,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (Black) S",
+      "Category": "T-Shirts",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 95,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (Black) XL",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 91,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (Black) XS",
+      "Category": "T-Shirts",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 96,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (Black) XXL",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 90,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (Black) XXS",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 84,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (White) 3XL",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 76,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (White) 3XS",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 85,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (White) 4XL",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 86,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (White) 5XL",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 87,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (White) 6XL",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 88,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (White) 7XL",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 81,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (White) L",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 80,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (White) M",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 79,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (White) S",
+      "Category": "T-Shirts",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 82,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (White) XL",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 78,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (White) XS",
+      "Category": "T-Shirts",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 83,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (White) XXL",
+      "Category": "T-Shirts",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 77,
+      "StockItemName": "\"The Gu\" red shirt XML tag t-shirt (White) XXS",
+      "Category": "T-Shirts",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 165,
+      "StockItemName": "10 mm Anti static bubble wrap (Blue) 10m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 38.87
+    },
+    {
+      "StockItemID": 166,
+      "StockItemName": "10 mm Anti static bubble wrap (Blue) 20m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 62.79
+    },
+    {
+      "StockItemID": 167,
+      "StockItemName": "10 mm Anti static bubble wrap (Blue) 50m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 148.01
+    },
+    {
+      "StockItemID": 156,
+      "StockItemName": "10 mm Double sided bubble wrap 10m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 22.43
+    },
+    {
+      "StockItemID": 157,
+      "StockItemName": "10 mm Double sided bubble wrap 20m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 44.85
+    },
+    {
+      "StockItemID": 158,
+      "StockItemName": "10 mm Double sided bubble wrap 50m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 156.98
+    },
+    {
+      "StockItemID": 168,
+      "StockItemName": "20 mm Anti static bubble wrap (Blue) 10m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 43.36
+    },
+    {
+      "StockItemID": 169,
+      "StockItemName": "20 mm Anti static bubble wrap (Blue) 20m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 67.28
+    },
+    {
+      "StockItemID": 170,
+      "StockItemName": "20 mm Anti static bubble wrap (Blue) 50m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 152.49
+    },
+    {
+      "StockItemID": 159,
+      "StockItemName": "20 mm Double sided bubble wrap 10m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 160,
+      "StockItemName": "20 mm Double sided bubble wrap 20m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 49.34
+    },
+    {
+      "StockItemID": 161,
+      "StockItemName": "20 mm Double sided bubble wrap 50m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 161.46
+    },
+    {
+      "StockItemID": 188,
+      "StockItemName": "3 kg Courier post bag (White) 300x190x95mm",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 0.99
+    },
+    {
+      "StockItemID": 171,
+      "StockItemName": "32 mm Anti static bubble wrap (Blue) 10m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 172,
+      "StockItemName": "32 mm Anti static bubble wrap (Blue) 20m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 71.76
+    },
+    {
+      "StockItemID": 173,
+      "StockItemName": "32 mm Anti static bubble wrap (Blue) 50m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 156.98
+    },
+    {
+      "StockItemID": 162,
+      "StockItemName": "32 mm Double sided bubble wrap 10m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 32.89
+    },
+    {
+      "StockItemID": 163,
+      "StockItemName": "32 mm Double sided bubble wrap 20m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 55.32
+    },
+    {
+      "StockItemID": 164,
+      "StockItemName": "32 mm Double sided bubble wrap 50m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 167.44
+    },
+    {
+      "StockItemID": 213,
+      "StockItemName": "Air cushion film 200mmx100mm 325m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 130.07
+    },
+    {
+      "StockItemID": 214,
+      "StockItemName": "Air cushion film 200mmx200mm 325m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 134.55
+    },
+    {
+      "StockItemID": 215,
+      "StockItemName": "Air cushion machine (Blue)",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 2839.01
+    },
+    {
+      "StockItemID": 104,
+      "StockItemName": "Alien officer hoodie (Black) 3XL",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 52.33
+    },
+    {
+      "StockItemID": 105,
+      "StockItemName": "Alien officer hoodie (Black) 4XL",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 52.33
+    },
+    {
+      "StockItemID": 106,
+      "StockItemName": "Alien officer hoodie (Black) 5XL",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 52.33
+    },
+    {
+      "StockItemID": 102,
+      "StockItemName": "Alien officer hoodie (Black) XL",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 52.33
+    },
+    {
+      "StockItemID": 103,
+      "StockItemName": "Alien officer hoodie (Black) XXL",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 52.33
+    },
+    {
+      "StockItemID": 136,
+      "StockItemName": "Animal with big feet slippers (Brown) L",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 135,
+      "StockItemName": "Animal with big feet slippers (Brown) M",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 134,
+      "StockItemName": "Animal with big feet slippers (Brown) S",
+      "Category": "Furry Footwear",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 137,
+      "StockItemName": "Animal with big feet slippers (Brown) XL",
+      "Category": "Furry Footwear",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 192,
+      "StockItemName": "Black and orange fragile despatch tape 48mmx100m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 6.13
+    },
+    {
+      "StockItemID": 191,
+      "StockItemName": "Black and orange fragile despatch tape 48mmx75m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 5.53
+    },
+    {
+      "StockItemID": 194,
+      "StockItemName": "Black and orange glass with care despatch tape  48mmx100m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 6.13
+    },
+    {
+      "StockItemID": 193,
+      "StockItemName": "Black and orange glass with care despatch tape 48mmx75m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 5.53
+    },
+    {
+      "StockItemID": 196,
+      "StockItemName": "Black and orange handle with care despatch tape  48mmx100m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 6.13
+    },
+    {
+      "StockItemID": 195,
+      "StockItemName": "Black and orange handle with care despatch tape  48mmx75m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 5.53
+    },
+    {
+      "StockItemID": 198,
+      "StockItemName": "Black and orange this way up despatch tape  48mmx100m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 6.13
+    },
+    {
+      "StockItemID": 197,
+      "StockItemName": "Black and orange this way up despatch tape 48mmx75m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 5.53
+    },
+    {
+      "StockItemID": 199,
+      "StockItemName": "Black and yellow heavy despatch tape  48mmx75m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 5.53
+    },
+    {
+      "StockItemID": 200,
+      "StockItemName": "Black and yellow heavy despatch tape 48mmx100m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 6.13
+    },
+    {
+      "StockItemID": 174,
+      "StockItemName": "Bubblewrap dispenser (Black) 1.5m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 358.8
+    },
+    {
+      "StockItemID": 175,
+      "StockItemName": "Bubblewrap dispenser (Blue) 1.5m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 358.8
+    },
+    {
+      "StockItemID": 176,
+      "StockItemName": "Bubblewrap dispenser (Red) 1.5m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 358.8
+    },
+    {
+      "StockItemID": 222,
+      "StockItemName": "Chocolate beetles 250g",
+      "Category": "Novelty Items",
+      "RecommendedRetailPrice": 12.23
+    },
+    {
+      "StockItemID": 223,
+      "StockItemName": "Chocolate echidnas 250g",
+      "Category": "Novelty Items",
+      "RecommendedRetailPrice": 12.23
+    },
+    {
+      "StockItemID": 224,
+      "StockItemName": "Chocolate frogs 250g",
+      "Category": "Novelty Items",
+      "RecommendedRetailPrice": 12.23
+    },
+    {
+      "StockItemID": 225,
+      "StockItemName": "Chocolate sharks 250g",
+      "Category": "Novelty Items",
+      "RecommendedRetailPrice": 12.23
+    },
+    {
+      "StockItemID": 190,
+      "StockItemName": "Clear packaging tape 48mmx100m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 5.23
+    },
+    {
+      "StockItemID": 189,
+      "StockItemName": "Clear packaging tape 48mmx75m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 4.34
+    },
+    {
+      "StockItemID": 25,
+      "StockItemName": "DBA joke mug - I will get you in order (Black)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 24,
+      "StockItemName": "DBA joke mug - I will get you in order (White)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 27,
+      "StockItemName": "DBA joke mug - SELECT caffeine FROM mug (Black)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 26,
+      "StockItemName": "DBA joke mug - SELECT caffeine FROM mug (White)",
+      "Category": "Mugs",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 19,
+      "StockItemName": "DBA joke mug - daaaaaa-ta (Black)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 18,
+      "StockItemName": "DBA joke mug - daaaaaa-ta (White)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 23,
+      "StockItemName": "DBA joke mug - it depends (Black)",
+      "Category": "Mugs",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 22,
+      "StockItemName": "DBA joke mug - it depends (White)",
+      "Category": "Mugs",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 17,
+      "StockItemName": "DBA joke mug - mind if I join you? (Black)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 16,
+      "StockItemName": "DBA joke mug - mind if I join you? (White)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 29,
+      "StockItemName": "DBA joke mug - two types of DBAs (Black)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 28,
+      "StockItemName": "DBA joke mug - two types of DBAs (White)",
+      "Category": "Mugs",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 21,
+      "StockItemName": "DBA joke mug - you might be a DBA if (Black)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 20,
+      "StockItemName": "DBA joke mug - you might be a DBA if (White)",
+      "Category": "Mugs",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 41,
+      "StockItemName": "Developer joke mug - (hip, hip, array) (Black)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 40,
+      "StockItemName": "Developer joke mug - (hip, hip, array) (White)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 31,
+      "StockItemName": "Developer joke mug - Oct 31 = Dec 25 (Black)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 30,
+      "StockItemName": "Developer joke mug - Oct 31 = Dec 25 (White)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 47,
+      "StockItemName": "Developer joke mug - a foo walks into a bar (Black)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 46,
+      "StockItemName": "Developer joke mug - a foo walks into a bar (White)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 35,
+      "StockItemName": "Developer joke mug - fun was unexpected at this time (Black)",
+      "Category": "Mugs",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 34,
+      "StockItemName": "Developer joke mug - fun was unexpected at this time (White)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 39,
+      "StockItemName": "Developer joke mug - inheritance is the OO way to become wealthy (Black)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 38,
+      "StockItemName": "Developer joke mug - inheritance is the OO way to become wealthy (White)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 51,
+      "StockItemName": "Developer joke mug - old C developers never die (Black)",
+      "Category": "Mugs",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 50,
+      "StockItemName": "Developer joke mug - old C developers never die (White)",
+      "Category": "Mugs",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 33,
+      "StockItemName": "Developer joke mug - that's a hardware problem (Black)",
+      "Category": "Mugs",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 32,
+      "StockItemName": "Developer joke mug - that's a hardware problem (White)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 45,
+      "StockItemName": "Developer joke mug - there are 10 types of people in the world (Black)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 44,
+      "StockItemName": "Developer joke mug - there are 10 types of people in the world (White)",
+      "Category": "Mugs",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 49,
+      "StockItemName": "Developer joke mug - this code was generated by a tool (Black)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 48,
+      "StockItemName": "Developer joke mug - this code was generated by a tool (White)",
+      "Category": "Novelty Items",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 43,
+      "StockItemName": "Developer joke mug - understanding recursion requires understanding recursion (Black)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 42,
+      "StockItemName": "Developer joke mug - understanding recursion requires understanding recursion (White)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 37,
+      "StockItemName": "Developer joke mug - when your hammer is C++ (Black)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 36,
+      "StockItemName": "Developer joke mug - when your hammer is C++ (White)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 120,
+      "StockItemName": "Dinosaur battery-powered slippers (Green) L",
+      "Category": "Furry Footwear",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 119,
+      "StockItemName": "Dinosaur battery-powered slippers (Green) M",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 118,
+      "StockItemName": "Dinosaur battery-powered slippers (Green) S",
+      "Category": "Furry Footwear",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 121,
+      "StockItemName": "Dinosaur battery-powered slippers (Green) XL",
+      "Category": "Furry Footwear",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 187,
+      "StockItemName": "Express post box 5kg (White) 350x280x130mm",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 1.42
+    },
+    {
+      "StockItemID": 140,
+      "StockItemName": "Furry animal socks (Pink) L",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 7.48
+    },
+    {
+      "StockItemID": 139,
+      "StockItemName": "Furry animal socks (Pink) M",
+      "Category": "Furry Footwear",
+      "RecommendedRetailPrice": 7.48
+    },
+    {
+      "StockItemID": 138,
+      "StockItemName": "Furry animal socks (Pink) S",
+      "Category": "Furry Footwear",
+      "RecommendedRetailPrice": 7.48
+    },
+    {
+      "StockItemID": 141,
+      "StockItemName": "Furry animal socks (Pink) XL",
+      "Category": "Furry Footwear",
+      "RecommendedRetailPrice": 7.48
+    },
+    {
+      "StockItemID": 132,
+      "StockItemName": "Furry gorilla with big eyes slippers (Black) L",
+      "Category": "Furry Footwear",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 131,
+      "StockItemName": "Furry gorilla with big eyes slippers (Black) M",
+      "Category": "Furry Footwear",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 130,
+      "StockItemName": "Furry gorilla with big eyes slippers (Black) S",
+      "Category": "Furry Footwear",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 133,
+      "StockItemName": "Furry gorilla with big eyes slippers (Black) XL",
+      "Category": "Furry Footwear",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 148,
+      "StockItemName": "Halloween skull mask (Gray) L",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 147,
+      "StockItemName": "Halloween skull mask (Gray) M",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 146,
+      "StockItemName": "Halloween skull mask (Gray) S",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 149,
+      "StockItemName": "Halloween skull mask (Gray) XL",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 144,
+      "StockItemName": "Halloween zombie mask (Light Brown) L",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 143,
+      "StockItemName": "Halloween zombie mask (Light Brown) M",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 142,
+      "StockItemName": "Halloween zombie mask (Light Brown) S",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 145,
+      "StockItemName": "Halloween zombie mask (Light Brown) XL",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 26.91
+    },
+    {
+      "StockItemID": 57,
+      "StockItemName": "IT joke mug - hardware: part of the computer that can be kicked (Black)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 56,
+      "StockItemName": "IT joke mug - hardware: part of the computer that can be kicked (White)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 53,
+      "StockItemName": "IT joke mug - keyboard not found … press F1 to continue (Black)",
+      "Category": "Novelty Items",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 52,
+      "StockItemName": "IT joke mug - keyboard not found … press F1 to continue (White)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 55,
+      "StockItemName": "IT joke mug - that behavior is by design (Black)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 54,
+      "StockItemName": "IT joke mug - that behavior is by design (White)",
+      "Category": "Mugs",
+      "RecommendedRetailPrice": 19.44
+    },
+    {
+      "StockItemID": 212,
+      "StockItemName": "Large  replacement blades 18mm",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 6.43
+    },
+    {
+      "StockItemID": 155,
+      "StockItemName": "Large sized bubblewrap roll 50m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 35.88
+    },
+    {
+      "StockItemID": 154,
+      "StockItemName": "Medium sized bubblewrap roll 20m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 29.9
+    },
+    {
+      "StockItemID": 220,
+      "StockItemName": "Novelty chilli chocolates 250g",
+      "Category": "Novelty Items",
+      "RecommendedRetailPrice": 12.23
+    },
+    {
+      "StockItemID": 221,
+      "StockItemName": "Novelty chilli chocolates 500g",
+      "Category": "Novelty Items",
+      "RecommendedRetailPrice": 20.74
+    },
+    {
+      "StockItemID": 3,
+      "StockItemName": "Office cube periscope (Black)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 27.66
+    },
+    {
+      "StockItemID": 124,
+      "StockItemName": "Ogre battery-powered slippers (Green) L",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 123,
+      "StockItemName": "Ogre battery-powered slippers (Green) M",
+      "Category": "Furry Footwear",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 122,
+      "StockItemName": "Ogre battery-powered slippers (Green) S",
+      "Category": "Furry Footwear",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 125,
+      "StockItemName": "Ogre battery-powered slippers (Green) XL",
+      "Category": "Furry Footwear",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 152,
+      "StockItemName": "Pack of 12 action figures (female)",
+      "Category": "Toys",
+      "RecommendedRetailPrice": 23.92
+    },
+    {
+      "StockItemID": 151,
+      "StockItemName": "Pack of 12 action figures (male)",
+      "Category": "Toys",
+      "RecommendedRetailPrice": 23.92
+    },
+    {
+      "StockItemID": 150,
+      "StockItemName": "Pack of 12 action figures (variety)",
+      "Category": "Toys",
+      "RecommendedRetailPrice": 23.92
+    },
+    {
+      "StockItemID": 210,
+      "StockItemName": "Packing knife with metal insert blade (Yellow) 18mm",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 3.59
+    },
+    {
+      "StockItemID": 209,
+      "StockItemName": "Packing knife with metal insert blade (Yellow) 9mm",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 2.83
+    },
+    {
+      "StockItemID": 206,
+      "StockItemName": "Permanent marker black 5mm nib (Black) 5mm",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 4.04
+    },
+    {
+      "StockItemID": 207,
+      "StockItemName": "Permanent marker blue 5mm nib (Blue) 5mm",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 4.04
+    },
+    {
+      "StockItemID": 208,
+      "StockItemName": "Permanent marker red 5mm nib (Red) 5mm",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 4.04
+    },
+    {
+      "StockItemID": 128,
+      "StockItemName": "Plush shark slippers (Gray) L",
+      "Category": "Furry Footwear",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 127,
+      "StockItemName": "Plush shark slippers (Gray) M",
+      "Category": "Furry Footwear",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 126,
+      "StockItemName": "Plush shark slippers (Gray) S",
+      "Category": "Furry Footwear",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 129,
+      "StockItemName": "Plush shark slippers (Gray) XL",
+      "Category": "Furry Footwear",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 66,
+      "StockItemName": "RC big wheel monster truck with remote control (Black) 1/50 scale",
+      "Category": "Toys",
+      "RecommendedRetailPrice": 67.28
+    },
+    {
+      "StockItemID": 58,
+      "StockItemName": "RC toy sedan car with remote control (Black) 1/50 scale",
+      "Category": "Toys",
+      "RecommendedRetailPrice": 37.38
+    },
+    {
+      "StockItemID": 60,
+      "StockItemName": "RC toy sedan car with remote control (Blue) 1/50 scale",
+      "Category": "Toys",
+      "RecommendedRetailPrice": 37.38
+    },
+    {
+      "StockItemID": 61,
+      "StockItemName": "RC toy sedan car with remote control (Green) 1/50 scale",
+      "Category": "Toys",
+      "RecommendedRetailPrice": 37.38
+    },
+    {
+      "StockItemID": 63,
+      "StockItemName": "RC toy sedan car with remote control (Pink) 1/50 scale",
+      "Category": "Novelty Items",
+      "RecommendedRetailPrice": 37.38
+    },
+    {
+      "StockItemID": 59,
+      "StockItemName": "RC toy sedan car with remote control (Red) 1/50 scale",
+      "Category": "Toys",
+      "RecommendedRetailPrice": 37.38
+    },
+    {
+      "StockItemID": 62,
+      "StockItemName": "RC toy sedan car with remote control (Yellow) 1/50 scale",
+      "Category": "Toys",
+      "RecommendedRetailPrice": 37.38
+    },
+    {
+      "StockItemID": 65,
+      "StockItemName": "RC vintage American toy coupe with remote control (Black) 1/50 scale",
+      "Category": "Toys",
+      "RecommendedRetailPrice": 44.85
+    },
+    {
+      "StockItemID": 64,
+      "StockItemName": "RC vintage American toy coupe with remote control (Red) 1/50 scale",
+      "Category": "Toys",
+      "RecommendedRetailPrice": 44.85
+    },
+    {
+      "StockItemID": 202,
+      "StockItemName": "Red and white urgent  heavy despatch tape  48mmx100m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 6.13
+    },
+    {
+      "StockItemID": 201,
+      "StockItemName": "Red and white urgent despatch tape 48mmx75m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 5.53
+    },
+    {
+      "StockItemID": 75,
+      "StockItemName": "Ride on big wheel monster truck (Black) 1/12 scale",
+      "Category": "Toys",
+      "RecommendedRetailPrice": 515.78
+    },
+    {
+      "StockItemID": 67,
+      "StockItemName": "Ride on toy sedan car (Black) 1/12 scale",
+      "Category": "Toys",
+      "RecommendedRetailPrice": 343.85
+    },
+    {
+      "StockItemID": 69,
+      "StockItemName": "Ride on toy sedan car (Blue) 1/12 scale",
+      "Category": "Novelty Items",
+      "RecommendedRetailPrice": 343.85
+    },
+    {
+      "StockItemID": 70,
+      "StockItemName": "Ride on toy sedan car (Green) 1/12 scale",
+      "Category": "Toys",
+      "RecommendedRetailPrice": 343.85
+    },
+    {
+      "StockItemID": 72,
+      "StockItemName": "Ride on toy sedan car (Pink) 1/12 scale",
+      "Category": "Toys",
+      "RecommendedRetailPrice": 343.85
+    },
+    {
+      "StockItemID": 68,
+      "StockItemName": "Ride on toy sedan car (Red) 1/12 scale",
+      "Category": "Toys",
+      "RecommendedRetailPrice": 343.85
+    },
+    {
+      "StockItemID": 71,
+      "StockItemName": "Ride on toy sedan car (Yellow) 1/12 scale",
+      "Category": "Toys",
+      "RecommendedRetailPrice": 343.85
+    },
+    {
+      "StockItemID": 74,
+      "StockItemName": "Ride on vintage American toy coupe (Black) 1/12 scale",
+      "Category": "Toys",
+      "RecommendedRetailPrice": 426.08
+    },
+    {
+      "StockItemID": 73,
+      "StockItemName": "Ride on vintage American toy coupe (Red) 1/12 scale",
+      "Category": "Toys",
+      "RecommendedRetailPrice": 426.08
+    },
+    {
+      "StockItemID": 179,
+      "StockItemName": "Shipping carton (Brown) 229x229x229mm",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 1.57
+    },
+    {
+      "StockItemID": 180,
+      "StockItemName": "Shipping carton (Brown) 279x254x217mm",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 1.66
+    },
+    {
+      "StockItemID": 184,
+      "StockItemName": "Shipping carton (Brown) 305x305x305mm",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 5.23
+    },
+    {
+      "StockItemID": 181,
+      "StockItemName": "Shipping carton (Brown) 356x229x229mm",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 1.7
+    },
+    {
+      "StockItemID": 185,
+      "StockItemName": "Shipping carton (Brown) 356x356x279mm",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 3.05
+    },
+    {
+      "StockItemID": 177,
+      "StockItemName": "Shipping carton (Brown) 413x285x187mm",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 1.57
+    },
+    {
+      "StockItemID": 182,
+      "StockItemName": "Shipping carton (Brown) 457x279x279mm",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 1.91
+    },
+    {
+      "StockItemID": 186,
+      "StockItemName": "Shipping carton (Brown) 457x457x457mm",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 3.14
+    },
+    {
+      "StockItemID": 183,
+      "StockItemName": "Shipping carton (Brown) 480x270x320mm",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 4.1
+    },
+    {
+      "StockItemID": 178,
+      "StockItemName": "Shipping carton (Brown) 500x310x310mm",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 3.81
+    },
+    {
+      "StockItemID": 211,
+      "StockItemName": "Small 9mm replacement blades 9mm",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 6.13
+    },
+    {
+      "StockItemID": 153,
+      "StockItemName": "Small sized bubblewrap roll 10m",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 6.73
+    },
+    {
+      "StockItemID": 115,
+      "StockItemName": "Superhero action jacket (Blue) 3XL",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 50.83
+    },
+    {
+      "StockItemID": 107,
+      "StockItemName": "Superhero action jacket (Blue) 3XS",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 37.38
+    },
+    {
+      "StockItemID": 116,
+      "StockItemName": "Superhero action jacket (Blue) 4XL",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 50.83
+    },
+    {
+      "StockItemID": 117,
+      "StockItemName": "Superhero action jacket (Blue) 5XL",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 50.83
+    },
+    {
+      "StockItemID": 112,
+      "StockItemName": "Superhero action jacket (Blue) L",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 44.85
+    },
+    {
+      "StockItemID": 111,
+      "StockItemName": "Superhero action jacket (Blue) M",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 44.85
+    },
+    {
+      "StockItemID": 110,
+      "StockItemName": "Superhero action jacket (Blue) S",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 37.38
+    },
+    {
+      "StockItemID": 113,
+      "StockItemName": "Superhero action jacket (Blue) XL",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 44.85
+    },
+    {
+      "StockItemID": 109,
+      "StockItemName": "Superhero action jacket (Blue) XS",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 37.38
+    },
+    {
+      "StockItemID": 114,
+      "StockItemName": "Superhero action jacket (Blue) XXL",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 44.85
+    },
+    {
+      "StockItemID": 108,
+      "StockItemName": "Superhero action jacket (Blue) XXS",
+      "Category": "Clothing",
+      "RecommendedRetailPrice": 37.38
+    },
+    {
+      "StockItemID": 203,
+      "StockItemName": "Tape dispenser (Black)",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 205,
+      "StockItemName": "Tape dispenser (Blue)",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 204,
+      "StockItemName": "Tape dispenser (Red)",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 9,
+      "StockItemName": "USB food flash drive - banana",
+      "Category": "USB Novelties",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 10,
+      "StockItemName": "USB food flash drive - chocolate bar",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 11,
+      "StockItemName": "USB food flash drive - cookie",
+      "Category": "USB Novelties",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 15,
+      "StockItemName": "USB food flash drive - dessert 10 drive variety pack",
+      "Category": "USB Novelties",
+      "RecommendedRetailPrice": 358.8
+    },
+    {
+      "StockItemID": 8,
+      "StockItemName": "USB food flash drive - dim sum 10 drive variety pack",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 358.8
+    },
+    {
+      "StockItemID": 12,
+      "StockItemName": "USB food flash drive - donut",
+      "Category": "USB Novelties",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 14,
+      "StockItemName": "USB food flash drive - fortune cookie",
+      "Category": "USB Novelties",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 5,
+      "StockItemName": "USB food flash drive - hamburger",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 6,
+      "StockItemName": "USB food flash drive - hot dog",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 7,
+      "StockItemName": "USB food flash drive - pizza slice",
+      "Category": "USB Novelties",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 13,
+      "StockItemName": "USB food flash drive - shrimp cocktail",
+      "Category": "USB Novelties",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 4,
+      "StockItemName": "USB food flash drive - sushi roll",
+      "Category": "USB Novelties",
+      "RecommendedRetailPrice": 47.84
+    },
+    {
+      "StockItemID": 1,
+      "StockItemName": "USB missile launcher (Green)",
+      "Category": "USB Novelties",
+      "RecommendedRetailPrice": 37.38
+    },
+    {
+      "StockItemID": 2,
+      "StockItemName": "USB rocket launcher (Gray)",
+      "Category": "Computing Novelties",
+      "RecommendedRetailPrice": 37.38
+    },
+    {
+      "StockItemID": 216,
+      "StockItemName": "Void fill 100 L bag (White) 100L",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 18.69
+    },
+    {
+      "StockItemID": 217,
+      "StockItemName": "Void fill 200 L bag (White) 200L",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 37.38
+    },
+    {
+      "StockItemID": 218,
+      "StockItemName": "Void fill 300 L bag (White) 300L",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 56.06
+    },
+    {
+      "StockItemID": 219,
+      "StockItemName": "Void fill 400 L bag (White) 400L",
+      "Category": "Packaging Materials",
+      "RecommendedRetailPrice": 74.75
+    },
+    {
+      "StockItemID": 227,
+      "StockItemName": "White chocolate moon rocks 250g",
+      "Category": "Novelty Items",
+      "RecommendedRetailPrice": 12.23
+    },
+    {
+      "StockItemID": 226,
+      "StockItemName": "White chocolate snow balls 250g",
+      "Category": "Novelty Items",
+      "RecommendedRetailPrice": 12.23
+    }
+  ]
+}
