@@ -36,9 +36,11 @@
         <label for="customerCategory">סגמנט לקוח</label>
         <select id="customerCategory"></select>
 
-        <label for="stockItem">מוצר</label>
-        <input list="productList" id="stockItemSearch" placeholder="חפשו מוצר...">
-        <datalist id="productList"></datalist>
+        <label for="stockItemSearch">מוצר</label>
+        <div class="combobox">
+          <input type="text" id="stockItemSearch" placeholder="חפשו מוצר..." autocomplete="off">
+          <div id="productDropdown" class="combobox-list" hidden></div>
+        </div>
         <input type="hidden" id="stockItem">
 
         <label for="unitPrice">מחיר יחידה מוצע (₪)</label>
@@ -52,7 +54,10 @@
       </div>
 
       <div class="card result-card" id="resultCard" hidden>
-        <h2>דוח תחזית</h2>
+        <div class="result-header">
+          <h2>דוח תחזית</h2>
+          <button id="resetBtn" class="secondary-btn">תחזית חדשה</button>
+        </div>
 
         <div class="result-grid">
           <div class="stat-tile">

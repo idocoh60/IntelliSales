@@ -32,15 +32,6 @@ async function loadReference() {
     catSelect.appendChild(opt);
   });
 
-  const productList = document.getElementById("productList");
-  REFERENCE.products.forEach(p => {
-    const opt = document.createElement("option");
-    opt.value = p.StockItemName;
-    opt.dataset.id = p.StockItemID;
-    opt.dataset.price = p.RecommendedRetailPrice;
-    productList.appendChild(opt);
-  });
-
   const monthSelect = document.getElementById("orderMonth");
   const currentMonth = new Date().getMonth() + 1;
   MONTH_NAMES.forEach((name, idx) => {
@@ -52,14 +43,50 @@ async function loadReference() {
   });
 }
 
-document.getElementById("stockItemSearch").addEventListener("input", (e) => {
-  const match = [...document.getElementById("productList").options].find(o => o.value === e.target.value);
-  if (match) {
-    document.getElementById("stockItem").value = match.dataset.id;
-    document.getElementById("unitPrice").value = match.dataset.price;
+// Custom searchable combobox for product selection - a native <input
+// list=...><datalist> was tried first, but browsers filter datalist
+// suggestions inconsistently (prefix-only in some, stale results after a
+// selection in others), which read as "the list gets stuck after one
+// prediction." This filters explicitly against REFERENCE.products on every
+// keystroke, so it always reflects the full catalog.
+const searchInput = document.getElementById("stockItemSearch");
+const dropdown = document.getElementById("productDropdown");
+
+function renderProductDropdown(query) {
+  const q = query.trim().toLowerCase();
+  if (!q) { dropdown.hidden = true; dropdown.innerHTML = ""; return; }
+
+  const matches = REFERENCE.products.filter(p => p.StockItemName.toLowerCase().includes(q)).slice(0, 25);
+  dropdown.innerHTML = "";
+  if (matches.length === 0) {
+    dropdown.innerHTML = `<div class="combobox-empty">לא נמצאו מוצרים תואמים.</div>`;
   } else {
-    document.getElementById("stockItem").value = "";
+    matches.forEach(p => {
+      const item = document.createElement("div");
+      item.className = "combobox-item";
+      item.textContent = p.StockItemName;
+      item.addEventListener("mousedown", (e) => {
+        e.preventDefault();
+        searchInput.value = p.StockItemName;
+        document.getElementById("stockItem").value = p.StockItemID;
+        document.getElementById("unitPrice").value = p.RecommendedRetailPrice;
+        dropdown.hidden = true;
+      });
+      dropdown.appendChild(item);
+    });
   }
+  dropdown.hidden = false;
+}
+
+searchInput.addEventListener("input", () => {
+  document.getElementById("stockItem").value = "";
+  renderProductDropdown(searchInput.value);
+});
+searchInput.addEventListener("focus", () => {
+  if (searchInput.value.trim()) renderProductDropdown(searchInput.value);
+});
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".combobox")) dropdown.hidden = true;
 });
 
 document.getElementById("predictBtn").addEventListener("click", async () => {
@@ -100,6 +127,17 @@ document.getElementById("predictBtn").addEventListener("click", async () => {
     btn.disabled = false;
     btn.textContent = "חשב תחזית";
   }
+});
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+  document.getElementById("resultCard").hidden = true;
+  document.getElementById("customerCategory").selectedIndex = 0;
+  searchInput.value = "";
+  document.getElementById("stockItem").value = "";
+  document.getElementById("unitPrice").value = "";
+  dropdown.hidden = true;
+  document.getElementById("formError").textContent = "";
+  searchInput.focus();
 });
 
 function renderResult(data) {
