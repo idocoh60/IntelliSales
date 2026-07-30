@@ -27,8 +27,16 @@ MODELS_DIR = os.path.join(ROOT, "ml", "models")
 DB_PATH = os.path.join(ROOT, "data", "intellisales.db")
 
 FEATURES = ["CustomerCategoryID", "StockItemID", "ActualUnitPrice", "DiscountPercentage", "OrderMonth"]
-DISCOUNT_SCENARIOS = [0.05, 0.15, 0.25]
-DECISION_THRESHOLD = 0.5
+
+# Matches the team's real working script (new_modeling_run.py /
+# run_smart_simulation) exactly: search for the minimum discount that
+# crosses an 80% success-probability target, capped at a 30% discount
+# ceiling. The only change from that script is *how* probability is
+# computed - the classifier's real predict_proba with the candidate
+# discount fed in as a feature, rather than the hand-tuned
+# (global_base + discount*1.8 + qty/250) formula - see README.md.
+TARGET_PROBABILITY = 0.80
+MAX_DISCOUNT_PCT = 30
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 
@@ -153,29 +161,38 @@ def api_predict():
     base_probability = float(classifier.predict_proba(current_row)[0][1])
     predicted_quantity = float(regressor.predict(current_row)[0])
 
-    # The Random Forest doesn't guarantee a monotonic relationship between
-    # discount and predicted probability (a bigger discount can come back
-    # with a *lower* raw score than a smaller one, since nothing constrains
-    # the trees that way). Shown to a sales rep, "more discount = less
-    # likely to close" reads as a bug, not nuance - so we enforce "at least
-    # as likely as any smaller discount already offered" when presenting
-    # the table, via a running max over increasing discount levels. The
-    # raw model output is unchanged; only the displayed scenario ordering
-    # is smoothed.
-    discount_table = []
-    running_max = base_probability
-    for discount in sorted(DISCOUNT_SCENARIOS):
+    # Optimal-discount search: walk discount 0% -> MAX_DISCOUNT_PCT in 1%
+    # steps and stop at the first one whose predicted probability crosses
+    # TARGET_PROBABILITY. This is a direct port of run_smart_simulation()
+    # in new_modeling_run.py, kept faithful to its threshold/ceiling
+    # constants; only the probability source changed (real predict_proba,
+    # not the hand-tuned formula). The full curve is returned too so the
+    # UI can plot probability vs. discount, not just the single answer.
+    curve = []
+    optimal_discount_pct = None
+    achieved_probability = base_probability
+    for d in range(0, MAX_DISCOUNT_PCT + 1):
+        discount = d / 100
         simulated_price = retail_price * (1 - discount)
         row = build_feature_row(customer_category_id, stock_item_id, simulated_price, order_month, discount)
-        raw_probability = float(classifier.predict_proba(row)[0][1])
-        running_max = max(running_max, raw_probability)
-        discount_table.append({
-            "discount_pct": discount * 100,
-            "simulated_unit_price": round(simulated_price, 2),
-            "probability": round(running_max, 4),
-            "raw_model_probability": round(raw_probability, 4),
-            "close_deal": running_max >= DECISION_THRESHOLD,
-        })
+        probability = float(classifier.predict_proba(row)[0][1])
+        curve.append({"discount_pct": d, "probability": round(probability, 4)})
+        achieved_probability = probability
+        if optimal_discount_pct is None and probability >= TARGET_PROBABILITY:
+            optimal_discount_pct = d
+            achieved_probability = probability
+            break
+
+    close_deal = optimal_discount_pct is not None
+    discount_recommendation = {
+        "target_probability": TARGET_PROBABILITY,
+        "max_discount_pct": MAX_DISCOUNT_PCT,
+        "optimal_discount_pct": optimal_discount_pct,
+        "achieved_probability": round(achieved_probability, 4),
+        "simulated_unit_price": round(retail_price * (1 - (optimal_discount_pct or MAX_DISCOUNT_PCT) / 100), 2),
+        "close_deal": close_deal,
+        "curve": curve,
+    }
 
     recs = SEGMENT_RECOMMENDATIONS.get(str(customer_category_id), [])
     cross_sell = next((r for r in recs if r["StockItemID"] != stock_item_id), None)
@@ -184,7 +201,7 @@ def api_predict():
         "base_probability": round(base_probability, 4),
         "global_baseline": round(METRICS["classifier"]["global_baseline"], 4),
         "predicted_quantity": round(predicted_quantity, 1),
-        "discount_table": discount_table,
+        "discount_recommendation": discount_recommendation,
         "cross_sell": cross_sell,
         "product": {"StockItemName": product["StockItemName"], "RecommendedRetailPrice": retail_price},
     })

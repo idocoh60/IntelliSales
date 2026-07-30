@@ -3,9 +3,9 @@
 Sales-rep decision-support dashboard for the IntelliSales capstone project
 (Emek Yezreel College, Dept. of Information Systems). A rep enters a new
 customer/product observation and gets back a model-driven read on the deal:
-predicted quantity, closing likelihood, a 3-point discount simulation, and a
-cross-sell suggestion - plus a live view of the underlying data and model
-performance, per the project's Deployment stage requirements.
+predicted quantity, closing likelihood, an optimal-discount recommendation,
+and a cross-sell suggestion - plus a live view of the underlying data and
+model performance, per the project's Deployment stage requirements.
 
 ## Running it (any machine, no SQL Server, no Docker, no internet needed)
 
@@ -29,9 +29,10 @@ month, then "חשב תחזית". You get back:
 - **סיכוי לעסקה משמעותית** - the classifier's predicted probability, with
   the historical baseline shown alongside for context.
 - **כמות מומלצת להזמנה** - the regressor's predicted quantity.
-- **סימולציית הנחות** - the same prediction re-run at 5% / 15% / 25%
-  simulated discount, so a rep can see whether offering a discount is
-  likely to move the deal.
+- **הנחה אופטימלית לסגירת עסקה** - searches discount 0%→30% for the
+  minimum that pushes the closing probability to 80%, and shows that one
+  number (plus the full probability-vs-discount curve) rather than a fixed
+  set of checkpoints - see "What's actually being modeled" below for why.
 - **המלצת Cross-sell** - the most popular product in the same customer
   segment that isn't the one just selected.
 
@@ -65,13 +66,18 @@ from) defines the real, already-tested targets, and this app keeps them:
   `Sales.OrderLines` has no discount column. It's computed exactly like
   `v_SuperPredict_Final` does: `(RecommendedRetailPrice - UnitPrice) /
   RecommendedRetailPrice`.
-- **The discount-simulation probabilities are the classifier's real
-  `predict_proba`** with the simulated discount fed in as the
-  `DiscountPercentage` feature - not a hand-tuned formula. One adjustment:
-  Random Forests don't guarantee the probability rises monotonically with
-  a bigger discount, which reads as a bug to a sales rep, so the displayed
-  (not the raw model) probability is smoothed to never decrease as the
-  discount increases - see the comment in `app/app.py`'s `/api/predict`.
+- **The discount recommendation is a direct port of the team's own
+  `run_smart_simulation()`** (`new_modeling_run.py`): search discount
+  0%→30% (`MAX_DISCOUNT_PCT`) for the first one whose predicted probability
+  crosses 80% (`TARGET_PROBABILITY`), and recommend that. The only change
+  from the original script is *how* the probability is computed - the
+  classifier's real `predict_proba` with the candidate discount fed in as
+  the `DiscountPercentage` feature, instead of the hand-tuned
+  `global_base + discount*1.8 + qty/250` formula. Note this deliberately
+  diverges from the signed Modelling report's literal description of a
+  fixed 5%/15%/25% checkpoint table - the report describes the polished
+  write-up, this app matches the team's actual working algorithm instead,
+  per an explicit decision made while reviewing v1 of this dashboard.
 - **Recommendation engine**: within a customer's segment, the most
   frequently purchased product, excluding whatever's already selected.
 

@@ -110,17 +110,41 @@ function renderResult(data) {
     `ממוצע היסטורי: ${(data.global_baseline * 100).toFixed(1)}%`;
   document.getElementById("quantityValue").textContent = data.predicted_quantity.toFixed(1);
 
-  const tbody = document.getElementById("discountTableBody");
-  tbody.innerHTML = "";
-  data.discount_table.forEach(row => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${row.discount_pct.toFixed(0)}%</td>
-      <td>₪${row.simulated_unit_price.toFixed(2)}</td>
-      <td>${(row.probability * 100).toFixed(1)}%</td>
-      <td><span class="badge ${row.close_deal ? "yes" : "no"}">${row.close_deal ? "לסגור עסקה" : "לא מומלץ"}</span></td>
-    `;
-    tbody.appendChild(tr);
+  const rec = data.discount_recommendation;
+  document.getElementById("discountTargetNote").textContent =
+    `חיפוש הנחה מינימלית (0%–${rec.max_discount_pct}%) שמגיעה לסיכוי סגירה של ${(rec.target_probability * 100).toFixed(0)}%.`;
+
+  if (rec.close_deal) {
+    document.getElementById("optimalDiscountValue").textContent = `${rec.optimal_discount_pct}%`;
+    document.getElementById("optimalPriceNote").textContent = `מחיר לאחר הנחה: ₪${rec.simulated_unit_price.toFixed(2)}`;
+  } else {
+    document.getElementById("optimalDiscountValue").textContent = `${rec.max_discount_pct}%+`;
+    document.getElementById("optimalPriceNote").textContent = "אף הנחה עד התקרה לא הספיקה";
+  }
+  document.getElementById("achievedProbabilityValue").textContent = `${(rec.achieved_probability * 100).toFixed(1)}%`;
+  document.getElementById("discountDecisionBadge").innerHTML =
+    `<span class="badge ${rec.close_deal ? "yes" : "no"}">${rec.close_deal ? "לסגור עסקה" : "דורש אישור מנהל"}</span>`;
+
+  if (charts.discountCurve) charts.discountCurve.destroy();
+  charts.discountCurve = new Chart(document.getElementById("discountCurveChart"), {
+    type: "line",
+    data: {
+      labels: rec.curve.map(p => `${p.discount_pct}%`),
+      datasets: [{
+        label: "סיכוי סגירה לפי הנחה",
+        data: rec.curve.map(p => p.probability * 100),
+        borderColor: seriesColor(0), backgroundColor: "transparent",
+        tension: 0.2, pointRadius: 0, borderWidth: 2,
+      }],
+    },
+    options: {
+      ...baseChartOptions({}),
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: textColor(), maxTicksLimit: 8 }, grid: { color: gridColor() } },
+        y: { min: 0, max: 100, ticks: { color: textColor() }, grid: { color: gridColor() } },
+      },
+    },
   });
 
   const crossSell = document.getElementById("crossSellCard");
@@ -252,18 +276,21 @@ function gridColor() {
   return getComputedStyle(document.documentElement).getPropertyValue("--gridline").trim();
 }
 
+function textColor() {
+  return getComputedStyle(document.documentElement).getPropertyValue("--text-secondary").trim();
+}
+
 function baseChartOptions({ stacked = false, indexAxis = "x" } = {}) {
-  const textColor = getComputedStyle(document.documentElement).getPropertyValue("--text-secondary").trim();
   return {
     responsive: true,
     maintainAspectRatio: false,
     indexAxis,
     plugins: {
-      legend: { labels: { color: textColor } },
+      legend: { labels: { color: textColor() } },
     },
     scales: {
-      x: { stacked, ticks: { color: textColor }, grid: { color: gridColor() } },
-      y: { stacked, ticks: { color: textColor }, grid: { color: gridColor() } },
+      x: { stacked, ticks: { color: textColor() }, grid: { color: gridColor() } },
+      y: { stacked, ticks: { color: textColor() }, grid: { color: gridColor() } },
     },
   };
 }

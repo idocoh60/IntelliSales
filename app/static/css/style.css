@@ -138,12 +138,8 @@ select, input[type="number"], input[type="text"] {
 .stat-value { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .stat-sub { font-size: 12px; color: var(--text-muted); }
 
-.discount-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 14px; }
-.discount-table th {
-  text-align: right; font-size: 12px; color: var(--text-muted); font-weight: 500;
-  padding: 6px 8px; border-bottom: 1px solid var(--gridline);
-}
-.discount-table td { padding: 10px 8px; border-bottom: 1px solid var(--gridline); font-variant-numeric: tabular-nums; }
+.discount-result { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 4px; }
+.chart-box.small { height: 180px; margin-top: 10px; }
 .badge { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; }
 .badge.yes { background: color-mix(in srgb, var(--status-good) 16%, transparent); color: var(--status-good); }
 .badge.no { background: color-mix(in srgb, var(--status-critical) 14%, transparent); color: var(--status-critical); }

@@ -67,13 +67,21 @@
           </div>
         </div>
 
-        <h3>סימולציית הנחות</h3>
-        <table class="discount-table">
-          <thead>
-            <tr><th>הנחה</th><th>מחיר לאחר הנחה</th><th>סיכוי סגירה</th><th>המלצה</th></tr>
-          </thead>
-          <tbody id="discountTableBody"></tbody>
-        </table>
+        <h3>הנחה אופטימלית לסגירת עסקה</h3>
+        <p class="muted" id="discountTargetNote"></p>
+        <div class="discount-result">
+          <div class="stat-tile">
+            <span class="stat-label">הנחה מומלצת</span>
+            <span class="stat-value" id="optimalDiscountValue">&mdash;</span>
+            <span class="stat-sub" id="optimalPriceNote"></span>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-label">סיכוי בהנחה זו</span>
+            <span class="stat-value" id="achievedProbabilityValue">&mdash;</span>
+            <span class="stat-sub" id="discountDecisionBadge"></span>
+          </div>
+        </div>
+        <div class="chart-box small"><canvas id="discountCurveChart"></canvas></div>
 
         <h3>המלצת Cross-sell</h3>
         <div class="cross-sell-card" id="crossSellCard">&mdash;</div>
