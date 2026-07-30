@@ -54,14 +54,28 @@ const dropdown = document.getElementById("productDropdown");
 
 function renderProductDropdown(query) {
   const q = query.trim().toLowerCase();
-  if (!q) { dropdown.hidden = true; dropdown.innerHTML = ""; return; }
+  // Empty query -> browse the full catalog (grouped by category so 227
+  // items are still scannable), not just "type to search".
+  const matches = (q
+    ? REFERENCE.products.filter(p => p.StockItemName.toLowerCase().includes(q))
+    : REFERENCE.products
+  ).slice().sort((a, b) =>
+    a.Category.localeCompare(b.Category) || a.StockItemName.localeCompare(b.StockItemName)
+  );
 
-  const matches = REFERENCE.products.filter(p => p.StockItemName.toLowerCase().includes(q)).slice(0, 25);
   dropdown.innerHTML = "";
   if (matches.length === 0) {
     dropdown.innerHTML = `<div class="combobox-empty">לא נמצאו מוצרים תואמים.</div>`;
   } else {
+    let lastCategory = null;
     matches.forEach(p => {
+      if (p.Category !== lastCategory) {
+        const heading = document.createElement("div");
+        heading.className = "combobox-heading";
+        heading.textContent = p.Category;
+        dropdown.appendChild(heading);
+        lastCategory = p.Category;
+      }
       const item = document.createElement("div");
       item.className = "combobox-item";
       item.textContent = p.StockItemName;
@@ -82,9 +96,7 @@ searchInput.addEventListener("input", () => {
   document.getElementById("stockItem").value = "";
   renderProductDropdown(searchInput.value);
 });
-searchInput.addEventListener("focus", () => {
-  if (searchInput.value.trim()) renderProductDropdown(searchInput.value);
-});
+searchInput.addEventListener("focus", () => renderProductDropdown(searchInput.value));
 document.addEventListener("click", (e) => {
   if (!e.target.closest(".combobox")) dropdown.hidden = true;
 });

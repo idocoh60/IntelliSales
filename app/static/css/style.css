@@ -146,6 +146,10 @@ select, input[type="number"], input[type="text"] {
 .combobox-item { padding: 9px 12px; font-size: 13px; cursor: pointer; }
 .combobox-item:hover, .combobox-item.active { background: var(--page); }
 .combobox-empty { padding: 10px 12px; font-size: 13px; color: var(--text-muted); }
+.combobox-heading {
+  position: sticky; top: 0; padding: 6px 12px; font-size: 11px; font-weight: 700;
+  color: var(--text-muted); background: var(--surface-2); border-bottom: 1px solid var(--gridline);
+}
 
 .error-text { color: var(--status-critical); font-size: 13px; min-height: 18px; margin-top: 8px; }
 
