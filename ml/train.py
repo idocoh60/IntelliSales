@@ -47,6 +47,7 @@ import joblib
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from sklearn.inspection import permutation_importance
 from sklearn.metrics import (
     accuracy_score,
     confusion_matrix,
@@ -91,6 +92,33 @@ def load_dataset() -> pd.DataFrame:
     return df
 
 
+def compute_permutation_importance(model, X_test, y_test, scoring, sample_size=5000):
+    """
+    Mean Decrease Impurity (model.feature_importances_) is biased toward
+    high-cardinality features (StockItemID has 227 distinct values vs.
+    CustomerCategoryID's 8), which makes it an unfair test of the signed
+    Modelling report's claim that customer segment/order month are strong
+    predictors. Permutation importance isn't biased by cardinality - it
+    measures how much the real score drops when a feature is shuffled -
+    so it's the honest way to check that claim. Subsampled to `sample_size`
+    rows purely for runtime (standard practice; scikit-learn's own docs do
+    the same) - not for any other reason.
+    """
+    if len(X_test) > sample_size:
+        X_sample = X_test.sample(sample_size, random_state=RANDOM_STATE)
+        y_sample = y_test.loc[X_sample.index]
+    else:
+        X_sample, y_sample = X_test, y_test
+
+    result = permutation_importance(
+        model, X_sample, y_sample, scoring=scoring, n_repeats=10, random_state=RANDOM_STATE, n_jobs=-1
+    )
+    return {
+        feat: {"mean": round(float(m), 4), "std": round(float(s), 4)}
+        for feat, m, s in zip(FEATURES, result.importances_mean, result.importances_std)
+    }
+
+
 def build_targets(df: pd.DataFrame):
     median_qty = df["Quantity"].median()
     y_class = (df["Quantity"] > median_qty).astype(int)
@@ -118,6 +146,13 @@ def train_models(df: pd.DataFrame):
     class_pred = classifier.predict(X_test)
     class_proba = classifier.predict_proba(X_test)[:, 1]
 
+    print("Computing permutation importance (classifier)...")
+    classifier_perm_importance = compute_permutation_importance(classifier, X_test, y_test_c, scoring="accuracy")
+    print("Computing permutation importance (regressor)...")
+    regressor_perm_importance = compute_permutation_importance(
+        regressor, X_test_r, y_test_r, scoring="neg_mean_absolute_error"
+    )
+
     metrics = {
         "classifier": {
             "target_definition": f"Quantity > median ({median_qty:.1f} units)",
@@ -127,12 +162,14 @@ def train_models(df: pd.DataFrame):
             "auc": roc_auc_score(y_test_c, class_proba),
             "confusion_matrix": confusion_matrix(y_test_c, class_pred).tolist(),
             "feature_importance": dict(zip(FEATURES, classifier.feature_importances_.round(4).tolist())),
+            "permutation_importance": classifier_perm_importance,
             "global_baseline": float(y_class.mean()),
         },
         "regressor": {
             "target_definition": "Quantity (units per order line)",
             "mae": mean_absolute_error(y_test_r, regressor.predict(X_test_r)),
             "feature_importance": dict(zip(FEATURES, regressor.feature_importances_.round(4).tolist())),
+            "permutation_importance": regressor_perm_importance,
             "mean_quantity": float(y_qty.mean()),
         },
         "dataset": {

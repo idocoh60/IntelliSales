@@ -238,15 +238,30 @@ async function renderPerformanceTab() {
     options: baseChartOptions({ stacked: true }),
   });
 
-  const fi = m.classifier.feature_importance;
-  charts.featureImportance = new Chart(document.getElementById("featureImportanceChart"), {
-    type: "bar",
-    data: {
-      labels: Object.keys(fi),
-      datasets: [{ label: "חשיבות מאפיין (סיווג)", data: Object.values(fi), backgroundColor: seriesColor(2) }],
-    },
-    options: baseChartOptions({ indexAxis: "y" }),
-  });
+  function barChart(canvasId, importanceObj, isPermutation, colorIdx) {
+    const labels = Object.keys(importanceObj);
+    const values = isPermutation
+      ? labels.map(k => importanceObj[k].mean)
+      : labels.map(k => importanceObj[k]);
+    return new Chart(document.getElementById(canvasId), {
+      type: "bar",
+      data: { labels, datasets: [{ data: values, backgroundColor: seriesColor(colorIdx) }] },
+      options: { ...baseChartOptions({ indexAxis: "y" }), plugins: { legend: { display: false } } },
+    });
+  }
+
+  charts.classifierMdi = barChart("classifierMdiChart", m.classifier.feature_importance, false, 0);
+  charts.classifierPerm = barChart("classifierPermChart", m.classifier.permutation_importance, true, 1);
+  charts.regressorMdi = barChart("regressorMdiChart", m.regressor.feature_importance, false, 0);
+  charts.regressorPerm = barChart("regressorPermChart", m.regressor.permutation_importance, true, 1);
+
+  document.getElementById("segmentExplainerNote").innerHTML =
+    `בדוח ה-Modelling הנחנו שסגמנט הלקוח (<code>CustomerCategoryID</code>) הוא המנבא החזק ביותר, ושחודש ההזמנה (<code>OrderMonth</code>)
+    משמעותי בזיהוי עונתיות. בפועל, גם ב-Mean Decrease Impurity וגם ב-Permutation Importance (מדד לא מוטה לפי כמות ערכים -
+    ר' תיעוד ב-<code>ml/train.py</code>) שני הפיצ'רים האלה יוצאים כמעט חסרי השפעה בשני המודלים, בעוד ש-<code>StockItemID</code>
+    ו-<code>ActualUnitPrice</code> דומיננטיים בהרבה. ההסבר הסביר: זהות המוצר והמחיר כבר "לוכדים" בעקיפין את רוב המידע שסגמנט הלקוח
+    היה תורם (סגמנטים שונים נוטים לקנות מוצרים/במחירים שונים), כך שברגע שהמודל יודע מה נקנה ובאיזה מחיר - הסגמנט כמעט לא מוסיף
+    מידע נוסף. זהו ממצא אמפירי אמיתי שנבדק בשתי שיטות שונות, לא פגם בקוד.`;
 }
 
 // ---------- Insights tab ----------

@@ -22,17 +22,61 @@
       "DiscountPercentage": 0.0893,
       "OrderMonth": 0.0021
     },
+    "permutation_importance": {
+      "CustomerCategoryID": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "StockItemID": {
+        "mean": 0.3293,
+        "std": 0.0054
+      },
+      "ActualUnitPrice": {
+        "mean": 0.138,
+        "std": 0.0035
+      },
+      "DiscountPercentage": {
+        "mean": 0.0261,
+        "std": 0.0022
+      },
+      "OrderMonth": {
+        "mean": -0.0001,
+        "std": 0.0001
+      }
+    },
     "global_baseline": 0.4394287210596373
   },
   "regressor": {
     "target_definition": "Quantity (units per order line)",
-    "mae": 14.455500799074679,
+    "mae": 14.45550079907468,
     "feature_importance": {
       "CustomerCategoryID": 0.0045,
       "StockItemID": 0.3735,
       "ActualUnitPrice": 0.6004,
       "DiscountPercentage": 0.0154,
       "OrderMonth": 0.0062
+    },
+    "permutation_importance": {
+      "CustomerCategoryID": {
+        "mean": 0.054,
+        "std": 0.0267
+      },
+      "StockItemID": {
+        "mean": 16.8103,
+        "std": 0.2239
+      },
+      "ActualUnitPrice": {
+        "mean": 13.996,
+        "std": 0.1303
+      },
+      "DiscountPercentage": {
+        "mean": 0.3209,
+        "std": 0.0207
+      },
+      "OrderMonth": {
+        "mean": 0.0871,
+        "std": 0.0274
+      }
     },
     "mean_quantity": 32.0179893948982
   },

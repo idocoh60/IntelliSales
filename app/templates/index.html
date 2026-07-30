@@ -108,6 +108,10 @@
           <div class="metric-pill"><span>AUC</span><strong id="metricAuc"></strong></div>
         </div>
         <div class="chart-box"><canvas id="confusionChart"></canvas></div>
+        <h3>חשיבות מאפיינים (Mean Decrease Impurity)</h3>
+        <div class="chart-box small"><canvas id="classifierMdiChart"></canvas></div>
+        <h3>חשיבות מאפיינים (Permutation Importance)</h3>
+        <div class="chart-box small"><canvas id="classifierPermChart"></canvas></div>
       </div>
 
       <div class="card">
@@ -117,8 +121,16 @@
           <div class="metric-pill"><span>MAE</span><strong id="metricMae"></strong></div>
           <div class="metric-pill"><span>ממוצע כמות</span><strong id="metricMeanQty"></strong></div>
         </div>
-        <div class="chart-box"><canvas id="featureImportanceChart"></canvas></div>
+        <h3>חשיבות מאפיינים (Mean Decrease Impurity)</h3>
+        <div class="chart-box small"><canvas id="regressorMdiChart"></canvas></div>
+        <h3>חשיבות מאפיינים (Permutation Importance)</h3>
+        <div class="chart-box small"><canvas id="regressorPermChart"></canvas></div>
       </div>
+    </div>
+
+    <div class="card full-width">
+      <h2>סגמנט לקוח ועונתיות - למה החשיבות שלהם נמוכה?</h2>
+      <p class="muted" id="segmentExplainerNote"></p>
     </div>
   </section>
 
