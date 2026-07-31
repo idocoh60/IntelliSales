@@ -1,109 +1,89 @@
 # IntelliSales
 
-Sales-rep decision-support dashboard for the IntelliSales capstone project
-(Emek Yezreel College, Dept. of Information Systems). A rep enters a new
-customer/product observation and gets back a model-driven read on the deal:
-predicted quantity, closing likelihood, an optimal-discount recommendation,
-and a cross-sell suggestion - plus a live view of the underlying data and
-model performance, per the project's Deployment stage requirements.
+A decision-support dashboard for sales reps: enter a customer segment and a
+product, and get predicted order quantity, closing likelihood, an optimal
+discount recommendation, and a cross-sell suggestion - alongside live model
+performance metrics and data visualizations.
 
-## Running it (any machine, no SQL Server, no Docker, no internet needed)
+## Prerequisites
 
-Requires only Python 3.11+.
+Python 3.11 or later. Nothing else - no SQL Server, no Docker, no internet
+connection required to run the app.
+
+## Getting Started
+
+**macOS / Linux:**
 
 ```bash
-./run.sh        # macOS/Linux
-run.bat         # Windows
+git clone https://github.com/idocoh60/IntelliSales.git
+cd IntelliSales
+./run.sh
 ```
 
-This creates a virtual environment, installs dependencies, trains the models
-if `ml/models/` is empty (a few seconds - the cleaned dataset ships in the
-repo at `data/intellisales.db`), and starts the app at
-**http://127.0.0.1:5000**.
+**Windows:**
 
-## Using the dashboard
+```bat
+git clone https://github.com/idocoh60/IntelliSales.git
+cd IntelliSales
+run.bat
+```
 
-**תחזית חדשה (New prediction)** - pick a customer segment and a product (unit
-price auto-fills from the recommended retail price, editable) and an order
-month, then "חשב תחזית". You get back:
-- **סיכוי לעסקה משמעותית** - the classifier's predicted probability, with
-  the historical baseline shown alongside for context.
-- **כמות מומלצת להזמנה** - the regressor's predicted quantity.
-- **הנחה אופטימלית לסגירת עסקה** - searches discount 0%→30% for the
-  minimum that pushes the closing probability to 80%, and shows that one
-  number (plus the full probability-vs-discount curve) rather than a fixed
-  set of checkpoints - see "What's actually being modeled" below for why.
-- **המלצת Cross-sell** - the most popular product in the same customer
-  segment that isn't the one just selected.
+Either script sets up a virtual environment, installs dependencies, and
+starts the server (the cleaned dataset and trained models are already
+included, so this takes only a few seconds). Then open your browser at
+**http://127.0.0.1:5000**
 
-**ביצועי המודל (Model performance)** - accuracy/precision/recall/AUC and a
-confusion matrix for the classifier, MAE for the regressor, and feature
-importance charts for both - live from the last training run.
+To stop the server: `Ctrl+C` in the terminal.
 
-**תובנות נתונים (Data insights)** - the same exploratory views validated in
-the Data Understanding report (order-value distribution, sales by category,
-top products, sales trend, sales vs. median income by state), rebuilt as
-interactive charts.
+## Using the Dashboard
 
-## What's actually being modeled, and why (for the oral exam)
+**New Prediction** - select a customer segment and search for a product,
+then click "Calculate Prediction" for:
+- Success probability, with the historical average shown for comparison
+- Recommended order quantity
+- Optimal discount - the smallest discount (0-30%) that reaches the target
+  closing probability, with the full probability-vs-discount curve
+- Cross-sell suggestion - the top product in the same segment not yet
+  selected
 
-The signed Modelling report describes predicting "deal success," but
-WideWorldImporters only contains *completed* sales - there's no natural
-success/failure label in the data. The team's own working script
-(`new_modeling_run.py`, and the SQL view `v_SuperPredict_Final` it reads
-from) defines the real, already-tested targets, and this app keeps them:
+**Model Performance** - accuracy, precision, recall, AUC, and a confusion
+matrix for the classifier; MAE for the regressor; feature importance for
+both, measured two independent ways.
 
-- **Classifier**: `Quantity > median(Quantity)` - a binary "high-quantity
-  order" flag, standing in for deal strength.
-- **Regressor**: `Quantity` itself.
-- **Features**: `CustomerCategoryID`, `StockItemID`, `ActualUnitPrice`,
-  `DiscountPercentage`, `OrderMonth`. `CustomerCategoryID`/`StockItemID` are
-  used directly (both are already stable integer keys) rather than
-  factorizing the name columns as the draft script did - `pandas.factorize`
-  codes aren't stable across runs, which would silently break inference the
-  next time the model is retrained.
-- **DiscountPercentage is derived, not raw data**: real
-  `Sales.OrderLines` has no discount column. It's computed exactly like
-  `v_SuperPredict_Final` does: `(RecommendedRetailPrice - UnitPrice) /
-  RecommendedRetailPrice`.
-- **The discount recommendation is a direct port of the team's own
-  `run_smart_simulation()`** (`new_modeling_run.py`): search discount
-  0%→30% (`MAX_DISCOUNT_PCT`) for the first one whose predicted probability
-  crosses 80% (`TARGET_PROBABILITY`), and recommend that. The only change
-  from the original script is *how* the probability is computed - the
-  classifier's real `predict_proba` with the candidate discount fed in as
-  the `DiscountPercentage` feature, instead of the hand-tuned
-  `global_base + discount*1.8 + qty/250` formula. Note this deliberately
-  diverges from the signed Modelling report's literal description of a
-  fixed 5%/15%/25% checkpoint table - the report describes the polished
-  write-up, this app matches the team's actual working algorithm instead,
-  per an explicit decision made while reviewing v1 of this dashboard.
-- **Recommendation engine**: within a customer's segment, the most
-  frequently purchased product, excluding whatever's already selected.
+**Data Insights** - order-value distribution, sales by category, top
+products, sales trend over time, and sales vs. median income by state.
 
-## Where the data comes from
+## How the Models Work
 
-`data/intellisales.db` (committed to the repo) is a cleaned, merged export
-from the team's own SQL Server backup - see `DATA_SETUP.md` for exactly how
-it was produced and how to regenerate it if the source data ever changes.
-Nobody running the app needs to touch SQL Server; the exported SQLite file
-is all `app/app.py` and `ml/train.py` read from.
+- **Classifier**: Random Forest predicting whether an order is above the
+  median quantity.
+- **Regressor**: Random Forest predicting the exact order quantity.
+- **Shared features**: customer segment, product, unit price, discount
+  percentage, order month. Discount percentage is derived from the gap
+  between an item's recommended retail price and its actual sale price.
+- **Discount recommendation**: searches for the smallest discount that
+  reaches a target closing probability, rather than checking a few fixed
+  levels.
+- **Cross-sell**: ranks products by purchase frequency within each segment.
 
-## Project layout
+**On customer segment and seasonality**: our initial assumption was that
+segment and order month were strong predictors. Testing this three
+independent ways (feature importance, permutation importance, and a direct
+statistical test) shows both add very little once product and price are
+already known - product and price already capture most of that signal.
+Shown transparently in the Model Performance tab.
+
+## Project Structure
 
 ```
 IntelliSales/
-  data/intellisales.db     # cleaned, merged dataset (committed)
-  data/raw/                 # gitignored - raw SQL Server backup, dev-time only
-  etl/restore_and_export.py # one-time: SQL Server -> data/intellisales.db
-  ml/train.py                # trains the models, writes ml/models/*
-  ml/models/                 # classifier.pkl, regressor.pkl, metrics.json, ...
-  app/app.py                 # Flask backend
-  app/templates/, app/static # dashboard frontend
-  requirements.txt            # what the app needs to run
-  requirements-etl.txt         # what etl/restore_and_export.py additionally needs
-  run.sh / run.bat
-  DATA_SETUP.md               # how to regenerate data/intellisales.db
+  data/intellisales.db      # cleaned, merged dataset (included)
+  etl/restore_and_export.py # rebuilds data/intellisales.db from the source database
+  ml/train.py               # trains the models
+  ml/models/                # trained models and metrics (included)
+  app/                      # Flask backend and dashboard frontend
+  run.sh / run.bat          # one-command setup and launch
+  DATA_SETUP.md             # how the dataset was built, and how to regenerate it
 ```
 
 ## Retraining
@@ -113,4 +93,6 @@ source venv/bin/activate   # venv\Scripts\activate on Windows
 python3 ml/train.py
 ```
 
-Reads `data/intellisales.db`, rewrites everything in `ml/models/`.
+## Tech Stack
+
+Python, Flask, scikit-learn, pandas, SQLite, Chart.js.
