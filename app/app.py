@@ -216,15 +216,20 @@ def api_predict():
         "predicted_quantity": round(predicted_quantity, 1),
         "discount_recommendation": discount_recommendation,
         "cross_sell": cross_sell,
-        "product": {"StockItemName": product["StockItemName"], "RecommendedRetailPrice": retail_price},
+        "product": {
+            "StockItemName": product["StockItemName"],
+            "RecommendedRetailPrice": retail_price,
+            "Category": product["Category"],
+        },
         "customer_category_name": CATEGORY_LOOKUP.get(customer_category_id, ""),
     })
 
 
 SALES_PITCH_SYSTEM_PROMPT = (
-    "אתה עוזר לנציג מכירות בחברה סיטונאית להתכונן לשיחה עם לקוח. "
+    "אתה עוזר לנציג מכירות בחברה סיטונאית להתכונן לשיחה עם לקוח, על בסיס תחזית שהופקה ממודל. "
     "תן רק רשימת נקודות קצרות (בולטים) שהנציג יכול להשתמש בהן בשיחה - לא משפטים ארוכים ולא סיכום. "
-    "אל תבטיח הנחות, תנאים או עובדות שלא ניתנו לך במפורש בנתונים. "
+    "כל נקודה חייבת להתבסס על אחד מהנתונים שניתנו לך במפורש (מספר, אחוז, שם מוצר) - לא ניסוחים גנריים "
+    "שהיו מתאימים לכל מוצר. אל תבטיח הנחות, תנאים או עובדות שלא ניתנו לך. "
     "סגנון פשוט, ישיר, כאילו קולגה מייעץ לקולגה. כתיבה בעברית טבעית."
 )
 
@@ -244,24 +249,31 @@ def api_sales_pitch():
 
     rec = data["discount_recommendation"]
     discount_line = (
-        f'הנחה מומלצת: {rec["optimal_discount_pct"]}% (מעלה את הסיכוי ל-{rec["achieved_probability"] * 100:.0f}%)'
+        f'הנחה מומלצת: {rec["optimal_discount_pct"]}% (מעלה את הסיכוי מ-{data["base_probability"] * 100:.0f}% ל-{rec["achieved_probability"] * 100:.0f}%)'
         if rec.get("close_deal")
         else f'שום הנחה עד {rec["max_discount_pct"]}% לא הביאה לסיכוי גבוה מספיק - נדרש אישור מנהל'
     )
     cross_sell_line = (
-        f'מוצר משלים מומלץ: {data["cross_sell"]["StockItemName"]}'
+        f'מוצר משלים מומלץ: {data["cross_sell"]["StockItemName"]} (נרכש {data["cross_sell"]["purchase_count"]} פעמים בסגמנט הזה)'
         if data.get("cross_sell") else "אין המלצת מוצר משלים לסגמנט הזה"
+    )
+    category_line = f' (קטגוריה: {data["product_category"]})' if data.get("product_category") else ""
+    baseline_line = (
+        f'\n- ממוצע הצלחה היסטורי בכלל המערכת: {data["global_baseline"] * 100:.0f}% - '
+        f'{"גבוה מהממוצע" if data["base_probability"] > data["global_baseline"] else "נמוך מהממוצע"}'
+        if data.get("global_baseline") is not None else ""
     )
 
     user_prompt = f"""נתוני התחזית:
 - סגמנט לקוח: {data["customer_category_name"]}
-- מוצר מוצע: {data["product_name"]}
+- מוצר מוצע: {data["product_name"]}{category_line}
 - כמות מומלצת להזמנה: {data["predicted_quantity"]} יחידות
-- סיכוי סגירה (במחיר הנוכחי): {data["base_probability"] * 100:.0f}%
+- סיכוי סגירה (במחיר הנוכחי): {data["base_probability"] * 100:.0f}%{baseline_line}
 - {discount_line}
 - {cross_sell_line}
 
-כתוב 4-5 נקודות קצרות שהנציג יכול להשתמש בהן בשיחה עם לקוח מהסגמנט הזה, כדי לקדם את המכירה ואת המוצר המשלים."""
+כתוב 4-5 נקודות קצרות שהנציג יכול להשתמש בהן בשיחה עם לקוח מהסגמנט הזה, כדי לקדם את המכירה ואת המוצר המשלים.
+התייחס במפורש למספרים הספציפיים שלמעלה (הכמות, האחוזים, ההנחה) - לא ניסוחים כלליים."""
 
     try:
         response = openai_client.chat.completions.create(

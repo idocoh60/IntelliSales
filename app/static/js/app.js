@@ -214,8 +214,10 @@ function renderResult(data) {
   lastPredictionContext = {
     customer_category_name: data.customer_category_name,
     product_name: data.product.StockItemName,
+    product_category: data.product.Category,
     predicted_quantity: data.predicted_quantity,
     base_probability: data.base_probability,
+    global_baseline: data.global_baseline,
     discount_recommendation: rec,
     cross_sell: data.cross_sell,
   };
