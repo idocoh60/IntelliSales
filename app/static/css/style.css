@@ -135,7 +135,19 @@ select, input[type="number"], input[type="text"] {
 .secondary-btn:hover { background: var(--page); }
 .secondary-btn:disabled { opacity: 0.6; cursor: default; }
 
-.pitch-section { margin-top: 6px; }
+.pitch-section {
+  margin-top: 14px; padding: 14px; border-radius: 11px;
+  background: color-mix(in srgb, var(--series-3) 8%, var(--surface-2));
+  border: 1px solid color-mix(in srgb, var(--series-3) 30%, var(--border));
+}
+.pitch-section h3 { margin-top: 0; }
+.pitch-section .muted { margin-top: -4px; margin-bottom: 10px; }
+.pitch-btn {
+  width: 100%; padding: 11px; border: none; border-radius: 9px;
+  background: var(--series-3); color: white; font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.pitch-btn:hover { filter: brightness(1.08); }
+.pitch-btn:disabled { opacity: 0.6; cursor: default; }
 .pitch-result {
   margin-top: 10px; padding: 12px 14px; border-radius: 9px; background: var(--surface-2);
   border: 1px solid var(--border); font-size: 14px; line-height: 1.9; white-space: pre-line;

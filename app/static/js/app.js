@@ -252,7 +252,7 @@ document.getElementById("pitchBtn").addEventListener("click", async () => {
       : err.message;
   } finally {
     btn.disabled = false;
-    btn.textContent = "הצע לי משפט מכירה";
+    btn.textContent = "צור לי משפט מכירה";
   }
 });
 
