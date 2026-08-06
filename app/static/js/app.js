@@ -149,6 +149,9 @@ document.getElementById("resetBtn").addEventListener("click", () => {
   document.getElementById("unitPrice").value = "";
   dropdown.hidden = true;
   document.getElementById("formError").textContent = "";
+  document.getElementById("pitchResult").hidden = true;
+  document.getElementById("pitchError").textContent = "";
+  lastPredictionContext = null;
   searchInput.focus();
 });
 
@@ -204,7 +207,54 @@ function renderResult(data) {
   } else {
     crossSell.textContent = "אין המלצת cross-sell זמינה לסגמנט זה.";
   }
+
+  // Everything the sales-pitch endpoint needs, captured once here so the
+  // pitch button doesn't have to re-read (and can't get out of sync with)
+  // the fields shown above.
+  lastPredictionContext = {
+    customer_category_name: data.customer_category_name,
+    product_name: data.product.StockItemName,
+    predicted_quantity: data.predicted_quantity,
+    base_probability: data.base_probability,
+    discount_recommendation: rec,
+    cross_sell: data.cross_sell,
+  };
+  document.getElementById("pitchResult").hidden = true;
+  document.getElementById("pitchError").textContent = "";
 }
+
+// ---------- AI sales pitch (optional - needs OPENAI_API_KEY server-side) ----------
+let lastPredictionContext = null;
+
+document.getElementById("pitchBtn").addEventListener("click", async () => {
+  const btn = document.getElementById("pitchBtn");
+  const resultEl = document.getElementById("pitchResult");
+  const errorEl = document.getElementById("pitchError");
+  errorEl.textContent = "";
+
+  if (!lastPredictionContext) return;
+
+  btn.disabled = true;
+  btn.textContent = "חושב...";
+  try {
+    const res = await fetch("/api/sales-pitch", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(lastPredictionContext),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "שגיאה לא ידועה");
+    resultEl.textContent = data.pitch;
+    resultEl.hidden = false;
+  } catch (err) {
+    errorEl.textContent = err.message.includes("OPENAI_API_KEY")
+      ? "פיצ'ר זה דורש מפתח OpenAI API מוגדר בקובץ .env בשרת."
+      : err.message;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "הצע לי משפט מכירה";
+  }
+});
 
 // ---------- Performance tab ----------
 let performanceRendered = false;

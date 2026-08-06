@@ -53,6 +53,10 @@ both, measured two independent ways.
 **Data Insights** - order-value distribution, sales by category, top
 products, sales trend over time, and sales vs. median income by state.
 
+**AI Sales Pitch (optional)** - after a prediction, generates a short
+talking-point list for the rep based on that prediction. Needs an OpenAI
+key in `.env` (see `.env.example`); everything else works without it.
+
 ## How the Models Work
 
 - **Classifier**: Random Forest predicting whether an order is above the

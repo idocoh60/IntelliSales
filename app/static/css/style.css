@@ -133,6 +133,13 @@ select, input[type="number"], input[type="text"] {
   font-weight: 600; cursor: pointer;
 }
 .secondary-btn:hover { background: var(--page); }
+.secondary-btn:disabled { opacity: 0.6; cursor: default; }
+
+.pitch-section { margin-top: 6px; }
+.pitch-result {
+  margin-top: 10px; padding: 12px 14px; border-radius: 9px; background: var(--surface-2);
+  border: 1px solid var(--border); font-size: 14px; line-height: 1.9; white-space: pre-line;
+}
 
 .result-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
 .result-header h2 { margin: 0; }

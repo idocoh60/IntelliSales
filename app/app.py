@@ -19,12 +19,24 @@ import sqlite3
 import joblib
 import numpy as np
 import pandas as pd
+import openai
+from dotenv import load_dotenv
 from flask import Flask, jsonify, render_template, request
+from openai import OpenAI
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.join(HERE, "..")
 MODELS_DIR = os.path.join(ROOT, "ml", "models")
 DB_PATH = os.path.join(ROOT, "data", "intellisales.db")
+
+load_dotenv(os.path.join(ROOT, ".env"))
+
+# The sales-pitch feature is optional: everything else in the app is fully
+# local and free to run. This is the one feature that needs internet access
+# and an OpenAI API key (OPENAI_API_KEY in .env). If it's not set, the
+# endpoint below reports itself as unavailable instead of crashing the app.
+OPENAI_MODEL = "gpt-4o-mini"
+openai_client = OpenAI(api_key=os.environ["OPENAI_API_KEY"]) if os.environ.get("OPENAI_API_KEY") else None
 
 FEATURES = ["CustomerCategoryID", "StockItemID", "ActualUnitPrice", "DiscountPercentage", "OrderMonth"]
 
@@ -53,6 +65,7 @@ with open(os.path.join(MODELS_DIR, "metrics.json"), encoding="utf-8") as f:
     METRICS = json.load(f)
 
 PRODUCT_LOOKUP = {p["StockItemID"]: p for p in REFERENCE_DATA["products"]}
+CATEGORY_LOOKUP = {c["CustomerCategoryID"]: c["CustomerCategoryName"] for c in REFERENCE_DATA["customer_categories"]}
 
 
 def build_feature_row(customer_category_id, stock_item_id, unit_price, order_month, discount_pct):
@@ -204,7 +217,73 @@ def api_predict():
         "discount_recommendation": discount_recommendation,
         "cross_sell": cross_sell,
         "product": {"StockItemName": product["StockItemName"], "RecommendedRetailPrice": retail_price},
+        "customer_category_name": CATEGORY_LOOKUP.get(customer_category_id, ""),
     })
+
+
+SALES_PITCH_SYSTEM_PROMPT = (
+    "אתה עוזר לנציג מכירות בחברה סיטונאית להתכונן לשיחה עם לקוח. "
+    "תן רק רשימת נקודות קצרות (בולטים) שהנציג יכול להשתמש בהן בשיחה - לא משפטים ארוכים ולא סיכום. "
+    "אל תבטיח הנחות, תנאים או עובדות שלא ניתנו לך במפורש בנתונים. "
+    "סגנון פשוט, ישיר, כאילו קולגה מייעץ לקולגה. כתיבה בעברית טבעית."
+)
+
+
+@app.route("/api/sales-pitch", methods=["POST"])
+def api_sales_pitch():
+    if openai_client is None:
+        return jsonify({"error": "sales pitch not configured (OPENAI_API_KEY missing)"}), 503
+
+    data = request.get_json(force=True)
+    required = [
+        "customer_category_name", "product_name", "predicted_quantity",
+        "base_probability", "discount_recommendation",
+    ]
+    if any(k not in data for k in required):
+        return jsonify({"error": "missing prediction context"}), 400
+
+    rec = data["discount_recommendation"]
+    discount_line = (
+        f'הנחה מומלצת: {rec["optimal_discount_pct"]}% (מעלה את הסיכוי ל-{rec["achieved_probability"] * 100:.0f}%)'
+        if rec.get("close_deal")
+        else f'שום הנחה עד {rec["max_discount_pct"]}% לא הביאה לסיכוי גבוה מספיק - נדרש אישור מנהל'
+    )
+    cross_sell_line = (
+        f'מוצר משלים מומלץ: {data["cross_sell"]["StockItemName"]}'
+        if data.get("cross_sell") else "אין המלצת מוצר משלים לסגמנט הזה"
+    )
+
+    user_prompt = f"""נתוני התחזית:
+- סגמנט לקוח: {data["customer_category_name"]}
+- מוצר מוצע: {data["product_name"]}
+- כמות מומלצת להזמנה: {data["predicted_quantity"]} יחידות
+- סיכוי סגירה (במחיר הנוכחי): {data["base_probability"] * 100:.0f}%
+- {discount_line}
+- {cross_sell_line}
+
+כתוב 4-5 נקודות קצרות שהנציג יכול להשתמש בהן בשיחה עם לקוח מהסגמנט הזה, כדי לקדם את המכירה ואת המוצר המשלים."""
+
+    try:
+        response = openai_client.chat.completions.create(
+            model=OPENAI_MODEL,
+            messages=[
+                {"role": "system", "content": SALES_PITCH_SYSTEM_PROMPT},
+                {"role": "user", "content": user_prompt},
+            ],
+            max_tokens=350,
+            temperature=0.7,
+        )
+        pitch = response.choices[0].message.content.strip()
+        return jsonify({"pitch": pitch})
+    except openai.RateLimitError:
+        return jsonify({"error": "אין יתרה זמינה בחשבון ה-OpenAI. יש להוסיף קרדיט ב-platform.openai.com."}), 502
+    except openai.AuthenticationError:
+        return jsonify({"error": "מפתח ה-OpenAI API לא תקף."}), 502
+    except openai.APIConnectionError:
+        return jsonify({"error": "לא ניתן להתחבר ל-OpenAI. בדקו את חיבור האינטרנט."}), 502
+    except Exception as exc:  # noqa: BLE001 - unexpected error: log full detail, keep the UI message short
+        app.logger.error("sales pitch request failed: %s", exc)
+        return jsonify({"error": "יצירת משפט המכירה נכשלה. נסו שוב."}), 502
 
 
 if __name__ == "__main__":
