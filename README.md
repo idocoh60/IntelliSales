@@ -57,6 +57,17 @@ products, sales trend over time, and sales vs. median income by state.
 talking-point list for the rep based on that prediction. Needs an OpenAI
 key in `.env` (see `.env.example`); everything else works without it.
 
+To set it up:
+```bash
+cp .env.example .env
+```
+Then open `.env` and replace the placeholder with your own OpenAI key:
+```
+OPENAI_API_KEY=sk-your-real-key-here
+```
+`.env` is listed in `.gitignore` and never gets committed - each person
+running the app keeps their own key locally.
+
 ## How the Models Work
 
 - **Classifier**: Random Forest predicting whether an order is above the

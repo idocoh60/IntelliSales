@@ -1,7 +1,4 @@
 @echo off
-REM Sets up (if needed) and runs the IntelliSales dashboard.
-REM Requires only Python 3.11+ - no SQL Server, no Docker, no internet access.
-REM
 REM זהה ל-‎run.sh, רק בשביל Windows - venv, התקנת תלויות, אימון אם צריך,
 REM והרצת השרת.
 cd /d "%~dp0"

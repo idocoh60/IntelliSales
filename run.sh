@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-# Sets up (if needed) and runs the IntelliSales dashboard.
-# Requires only Python 3.11+ - no SQL Server, no Docker, no internet access.
-#
 # סקריפט ההרצה למק/לינוקס - מסדר סביבת venv, מתקין תלויות, ומאמן מודלים
 # רק אם עוד אין (כדי לא לאמן מחדש בכל הרצה), ואז מרים את השרת.
 set -euo pipefail

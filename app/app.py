@@ -1,17 +1,3 @@
-"""
-IntelliSales dashboard - Flask backend.
-
-Serves the sales-rep dashboard and exposes the model-driven endpoints it
-calls: /api/reference (dropdown data), /api/predict (the core "enter a new
-observation, get a prediction" flow required by the deployment guidelines),
-/api/metrics (model performance tab), and /api/charts (data insight tab).
-
-All heavy lifting (training, data cleaning) already happened in etl/ and
-ml/train.py; this process only loads the resulting small artifacts and
-answers requests - no SQL Server, no Docker, no internet access needed to
-run it.
-"""
-
 # זה קובץ השרת (Flask) של כל האפליקציה - הוא זה שמריץ את הדשבורד ומחשוף
 # את כל ה-‎API-‏ים שהעמוד קורא להם (predict, metrics, charts, sales-pitch).
 # הוא לא מאמן שום דבר בעצמו - רק טוען את המודלים והקבצים המוכנים שנוצרו
