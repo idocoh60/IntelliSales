@@ -1,3 +1,9 @@
+<!--
+  זה קובץ ה-‎HTML היחיד של האתר - השלד הסטטי של הדשבורד עם שלושת הטאבים
+  (תחזית חדשה / ביצועי המודל / תובנות נתונים). כל התוכן הדינמי (מספרים,
+  גרפים) ממולא ע"י app.js אחרי שהדף נטען - כאן רק המבנה וה-‎id-‏ים שה-‎JS
+  מחפש.
+-->
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
@@ -26,6 +32,8 @@
 <main>
 
   <!-- ============ TAB: PREDICT ============ -->
+  <!-- הטאב הראשי: משמאל טופס הזנת תצפית, מימין כרטיס התוצאה (מוסתר עד
+       שיש תחזית ראשונה - hidden מוסר ע"י renderResult ב-‎app.js). -->
   <section id="tab-predict" class="tab-panel active">
     <div class="grid-2">
 
@@ -36,6 +44,9 @@
         <label for="customerCategory">סגמנט לקוח</label>
         <select id="customerCategory"></select>
 
+        <!-- תיבת חיפוש מוצר מותאמת אישית (לא select רגיל כי יש 227
+             מוצרים) - stockItem החבוי הוא ה-‎ID שבאמת נשלח לשרת, הוא
+             מתמלא ע"י app.js כשבוחרים פריט מהרשימה. -->
         <label for="stockItemSearch">מוצר</label>
         <div class="combobox">
           <input type="text" id="stockItemSearch" placeholder="חפשו מוצר..." autocomplete="off">
@@ -86,6 +97,8 @@
             <span class="stat-sub" id="discountDecisionBadge"></span>
           </div>
         </div>
+        <!-- גרף עקומת ההסתברות מול אחוז ההנחה - מצויר ב-‎app.js מתוך
+             discount_recommendation.curve שמחזיר /api/predict. -->
         <div class="chart-box small"><canvas id="discountCurveChart"></canvas></div>
 
         <h3>המלצת Cross-sell</h3>
@@ -104,6 +117,9 @@
   </section>
 
   <!-- ============ TAB: PERFORMANCE ============ -->
+  <!-- כל התוכן פה ריק ב-‎HTML ומתמלא ע"י renderPerformanceTab() ב-‎app.js
+       (רק בפעם הראשונה שנכנסים לטאב) - שני כרטיסים למודלים עצמם, ולמטה
+       בדיקת ה-‎ANOVA העצמאית שבודקת את הנחות הדוח. -->
   <section id="tab-performance" class="tab-panel">
     <div class="grid-2">
       <div class="card">
@@ -155,6 +171,8 @@
   </section>
 
   <!-- ============ TAB: INSIGHTS ============ -->
+  <!-- חמישה גרפים סטטיים על כל הדאטה (לא קשור לתחזית ספציפית) - כולם
+       מתמלאים ע"י renderInsightsTab() ב-‎app.js מנתוני /api/charts. -->
   <section id="tab-insights" class="tab-panel">
     <div class="grid-2">
       <div class="card"><h2>התפלגות סכום שורת הזמנה</h2><div class="chart-box"><canvas id="orderValueChart"></canvas></div></div>
@@ -167,6 +185,8 @@
 
 </main>
 
+<!-- Chart.js (ספריית הגרפים) חייבת להיטען לפני app.js, כי app.js משתמש
+     ב-‎new Chart(...) שמוגדר שם. -->
 <script src="{{ url_for('static', filename='js/vendor/chart.umd.js') }}"></script>
 <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>

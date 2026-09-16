@@ -39,6 +39,18 @@ Design decisions, and why (see PLAN notes / README for the full story):
   app excludes whatever's already in the current order.
 """
 
+# זה קובץ האימון - סקריפט חד-פעמי (מריצים אותו ידנית, לא בזמן ריצת
+# האתר) שקורא את data/intellisales.db, מאמן את שני מודלי ה-‎Random Forest
+# ובונה את כל הקבצים (models/*.pkl וה-‎JSON-‏ים) שהאפליקציה ב-‎app/app.py
+# רק טוענת וקוראת. אם רוצים לאמן מחדש (למשל עם נתונים חדשים) - מריצים
+# python3 ml/train.py ופה זה קורה.
+#
+# חשוב לדעת בהגנה: בדוח ה-‎Modelling שהוגש למנחה ההנחה המקורית הייתה
+# שסגמנט הלקוח וחודש ההזמנה הם מנבאים חזקים לכמות/הצלחת עסקה. פונקציית
+# one_way_anova_eta_squared למטה בודקת את זה ישירות על הנתונים הגולמיים
+# (בלי מודל בכלל) ומראה שההנחה הזו כמעט לא מתקיימת בפועל - זה בדיוק
+# הממצא ה"מפתיע" שכדאי להיות מוכנים להסביר עליו.
+
 import json
 import os
 import sqlite3
@@ -67,12 +79,17 @@ FEATURES = ["CustomerCategoryID", "StockItemID", "ActualUnitPrice", "DiscountPer
 RANDOM_STATE = 42
 
 
+# קורא את שלוש הטבלאות מה-‎SQLite (שנוצר ע"י etl/restore_and_export.py),
+# מאחד אותן לטבלה אחת, ומחשב עליה את הפיצ'רים שחסרים בנתונים הגולמיים
+# (OrderMonth, DiscountPercentage) לפני שמעבירים אותה הלאה לאימון.
 def load_dataset() -> pd.DataFrame:
     with sqlite3.connect(DB_PATH) as conn:
         sales = pd.read_sql("SELECT * FROM sales_enriched", conn)
         customer_categories = pd.read_sql("SELECT * FROM customer_categories", conn)
         stock_pricing = pd.read_sql("SELECT * FROM stock_items_pricing", conn)
 
+    # מוסיפים לכל שורת מכירה את שם קטגוריית הלקוח ואת מחיר המחירון של
+    # המוצר - שתי הטבלאות הקטנות האלה לא נמצאות ב-‎sales_enriched עצמה.
     df = sales.merge(customer_categories, on="CustomerID", how="left")
     df = df.merge(stock_pricing, on=["StockItemID", "StockItemName"], how="left")
 
@@ -80,12 +97,18 @@ def load_dataset() -> pd.DataFrame:
     df["OrderMonth"] = df["OrderDate"].dt.month
     df["ActualUnitPrice"] = df["UnitPrice"]
 
+    # DiscountPercentage לא קיים בנתונים המקוריים - מחשבים אותו מהפער בין
+    # מחיר המחירון למחיר שבו נמכר בפועל, בדיוק כמו ב-‎v_SuperPredict_Final
+    # (ה-‎view של הצוות ב-‎SQL Server). clip(0, 0.9) מונע ערכים הזויים
+    # (הנחה שלילית = תוספת מחיר, או הנחה מעל 90%).
     df["DiscountPercentage"] = np.where(
         df["RecommendedRetailPrice"] > 0,
         (df["RecommendedRetailPrice"] - df["UnitPrice"]) / df["RecommendedRetailPrice"],
         0.0,
     ).clip(0, 0.9)
 
+    # מורידים שורות עם ערך חסר בכל אחד מהפיצ'רים או ביעד - מודל לא יכול
+    # להתאמן על שורה עם NaN.
     before = len(df)
     df = df.dropna(subset=FEATURES + ["Quantity", "CustomerCategoryName"]).copy()
     print(f"Training rows after dropping incomplete records: {len(df)} (was {before})")
@@ -93,6 +116,8 @@ def load_dataset() -> pd.DataFrame:
     return df
 
 
+# בודקת כמה כל פיצ'ר "באמת" חשוב למודל, בשיטה שלא מוטה כלפי פיצ'רים עם
+# הרבה ערכים אפשריים (בניגוד ל-‎feature_importances_ הרגיל של המודל).
 def compute_permutation_importance(model, X_test, y_test, scoring, sample_size=5000):
     """
     Mean Decrease Impurity (model.feature_importances_) is biased toward
@@ -120,6 +145,9 @@ def compute_permutation_importance(model, X_test, y_test, scoring, sample_size=5
     }
 
 
+# בונה את שני משתני היעד מאותה עמודת Quantity: y_class הוא בינארי (0/1,
+# מעל/מתחת לחציון - זה מה שהקלסיפייר לומד לחזות), ו-‎y_qty הוא הכמות
+# עצמה (בשביל הרגרסור).
 def build_targets(df: pd.DataFrame):
     median_qty = df["Quantity"].median()
     y_class = (df["Quantity"] > median_qty).astype(int)
@@ -127,10 +155,15 @@ def build_targets(df: pd.DataFrame):
     return y_class, y_qty, median_qty
 
 
+# מאמנת את שני המודלים (Random Forest לסיווג ולרגרסיה), מודדת עליהם
+# ביצועים על סט הבדיקה, ומחזירה גם dict מסודר עם כל המדדים ל-‎metrics.json
+# (זה מה שהאתר מציג בטאב "ביצועי המודל").
 def train_models(df: pd.DataFrame):
     X = df[FEATURES]
     y_class, y_qty, median_qty = build_targets(df)
 
+    # split נפרד לכל מודל כי ה-‎stratify משתמש ב-‎y_class (שלא רלוונטי
+    # לרגרסיה) - שני ה-‎split-‏ים באותו random_state כך שהחלוקה עקבית.
     X_train, X_test, y_train_c, y_test_c = train_test_split(
         X, y_class, test_size=0.2, random_state=RANDOM_STATE, stratify=y_class
     )
@@ -154,6 +187,9 @@ def train_models(df: pd.DataFrame):
         regressor, X_test_r, y_test_r, scoring="neg_mean_absolute_error"
     )
 
+    # global_baseline = אחוז השורות שהן "כמות גבוהה" בכל הדאטה - זה בדיוק
+    # ה-‎Global Baseline שמוזכר בדוח ה-‎Modelling: נקודת ייחוס יציבה
+    # שהתחזית של הלקוח הספציפי נמדדת מולה בפרונט ("ממוצע היסטורי: X%").
     metrics = {
         "classifier": {
             "target_definition": f"Quantity > median ({median_qty:.1f} units)",
@@ -181,6 +217,9 @@ def train_models(df: pd.DataFrame):
     return classifier, regressor, metrics, median_qty
 
 
+# זו הבדיקה הסטטיסטית העצמאית (בלי שום מודל בדרך) שסותרת את הנחת
+# הסגמנטציה/עונתיות מדוח ה-‎Modelling - ANOVA חד-כיווני קלאסי שבודק אם
+# הקבוצה (סגמנט לקוח, או חודש) בכלל מסבירה שונות משמעותית בכמות ההזמנה.
 def one_way_anova_eta_squared(df: pd.DataFrame, group_col: str, value_col: str = "Quantity") -> dict:
     """
     Independent check of the Modelling report's segment/seasonality
@@ -192,9 +231,15 @@ def one_way_anova_eta_squared(df: pd.DataFrame, group_col: str, value_col: str =
     effect will show up as "statistically significant" (tiny p-value), so
     eta squared - not the p-value - is what actually answers the question.
     """
+    # מחלקים את הנתונים לקבוצות לפי group_col (למשל כל סגמנט לקוח בנפרד)
+    # ומריצים F-test קלאסי - זה בודק אם ההבדל בין הממוצעים של הקבוצות
+    # גדול מדי מכדי להיות מקרי.
     groups = [g[value_col].values for _, g in df.groupby(group_col)]
     f_stat, p_value = stats.f_oneway(*groups)
 
+    # eta squared זה מה שבאמת קובע אם ההבדל משמעותי בעולם האמיתי (לא רק
+    # "מובהק סטטיסטית") - עם 458 אלף שורות אפילו רעש אקראי ייצא מובהק,
+    # אז חייבים למדוד את גודל האפקט בפועל.
     grand_mean = df[value_col].mean()
     ss_between = sum(len(g) * (g.mean() - grand_mean) ** 2 for g in (gr[value_col] for _, gr in df.groupby(group_col)))
     ss_total = ((df[value_col] - grand_mean) ** 2).sum()
@@ -211,6 +256,11 @@ def one_way_anova_eta_squared(df: pd.DataFrame, group_col: str, value_col: str =
     }
 
 
+# מנוע ה-‎cross-sell: לכל סגמנט לקוח בנפרד, מדרג את המוצרים לפי כמה
+# פעמים הם נרכשו בהיסטוריה (לא ניתוח "סל קניות" אמיתי לפי OrderID כמו
+# שתואר בדוח - זו גרסה פשוטה יותר, תדירות רכישה בתוך הסגמנט, שנבחרה כי
+# היא מהירה וזמינה בזמן אמת). app.py לוקח מהרשימה הזו את המוצר המדורג
+# הכי גבוה שעדיין לא נבחר בהזמנה הנוכחית.
 def build_segment_recommendations(df: pd.DataFrame, top_n: int = 10) -> dict:
     recs = {}
     for cat_id, group in df.groupby("CustomerCategoryID"):
@@ -227,6 +277,8 @@ def build_segment_recommendations(df: pd.DataFrame, top_n: int = 10) -> dict:
     return recs
 
 
+# בונה שתי רשימות עזר סטטיות (סגמנטים + מוצרים) שהאתר טוען פעם אחת
+# ומשתמש בהן למלא את תפריט הבחירה ותיבת החיפוש בטופס.
 def build_reference_data(df: pd.DataFrame) -> dict:
     categories = (
         df[["CustomerCategoryID", "CustomerCategoryName"]]
@@ -243,6 +295,8 @@ def build_reference_data(df: pd.DataFrame) -> dict:
     return {"customer_categories": categories, "products": products}
 
 
+# מריץ את כל התהליך מקצה לקצה: טוען נתונים, מאמן, בונה את כל קבצי
+# העזר, ושומר הכל בתוך ml/models/ - זה מה שרץ כשקוראים ל-‎python3 ml/train.py.
 def main():
     os.makedirs(MODELS_DIR, exist_ok=True)
     df = load_dataset()
@@ -253,6 +307,10 @@ def main():
 
     # Independent, model-free check of the Modelling report's segmentation
     # and seasonality assumptions (see one_way_anova_eta_squared docstring).
+    #
+    # כאן בפועל מריצים את בדיקת ה-‎ANOVA פעמיים - פעם על סגמנט הלקוח
+    # ופעם על חודש ההזמנה - ושומרים את התוצאה תחת bivariate_check
+    # ב-‎metrics.json, כדי שהטאב "ביצועי המודל" יוכל להציג את זה בגרפים.
     df_month = df.copy()
     df_month["OrderMonth"] = pd.to_datetime(df_month["OrderDate"]).dt.month
     metrics["bivariate_check"] = {
@@ -260,6 +318,8 @@ def main():
         "order_month": one_way_anova_eta_squared(df_month, "OrderMonth"),
     }
 
+    # שומרים את שני המודלים המאומנים לקבצי pkl - אלה בדיוק הקבצים
+    # ש-‎app.py טוען עם joblib.load כשהשרת עולה.
     joblib.dump(classifier, os.path.join(MODELS_DIR, "classifier.pkl"))
     joblib.dump(regressor, os.path.join(MODELS_DIR, "regressor.pkl"))
 

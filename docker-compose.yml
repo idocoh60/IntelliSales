@@ -1,3 +1,7 @@
+# מרים קונטיינר SQL Server זמני - נחוץ רק לשלב ה-‎ETL החד-פעמי
+# (etl/restore_and_export.py, לפי ההוראות ב-‎DATA_SETUP.md), לא לריצה
+# הרגילה של האתר. מחזיק את קובץ ה-.bak מ-./data/raw כדי שיהיה אפשר
+# לשחזר אותו בתוך הקונטיינר.
 services:
   wwi-sql:
     image: mcr.microsoft.com/mssql/server:2022-latest

@@ -1,3 +1,7 @@
+/* קובץ העיצוב היחיד של האתר - כל הצבעים, המרווחים והפריסה של הדשבורד.
+   משתני ה-‎CSS למטה (--surface-1 וכו') מוגדרים פעם למצב בהיר ופעם למצב
+   כהה, כדי שהאתר יתאים את עצמו אוטומטית להעדפת המערכת (prefers-color-scheme). */
+
 :root {
   color-scheme: light;
   --surface-1:      #fcfcfb;
@@ -60,6 +64,8 @@ body {
   color: var(--text-primary);
 }
 
+/* הבר העליון עם הלוגו וכפתורי הטאבים - sticky כדי שיישאר למעלה גם
+   בגלילה. */
 .topbar {
   display: flex;
   align-items: center;
@@ -93,9 +99,13 @@ body {
 
 main { max-width: 1200px; margin: 0 auto; padding: 28px; }
 
+/* app.js מחליף את class="active" בין הטאבים - זה מה שקובע איזה פאנל
+   מוצג. */
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
 
+/* grid רספונסיבי - כל כרטיס לפחות 380px, ומתכווץ למספר עמודות שנכנס
+   ברוחב המסך (אחת בטלפון, שתיים+ במחשב). */
 .grid-2 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
@@ -135,6 +145,8 @@ select, input[type="number"], input[type="text"] {
 .secondary-btn:hover { background: var(--page); }
 .secondary-btn:disabled { opacity: 0.6; cursor: default; }
 
+/* עיצוב מיוחד לאזור "עוזר שיחה (AI)" - מסגרת ורקע בגוון ירקרק כדי
+   שיובחן ויזואלית משאר כרטיס התוצאה כפיצ'ר נפרד (והאופציונלי). */
 .pitch-section {
   margin-top: 14px; padding: 14px; border-radius: 11px;
   background: color-mix(in srgb, var(--series-3) 8%, var(--surface-2));
@@ -156,6 +168,9 @@ select, input[type="number"], input[type="text"] {
 .result-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
 .result-header h2 { margin: 0; }
 
+/* תיבת החיפוש המותאמת אישית של המוצרים (app.js/renderProductDropdown
+   בונה את התוכן) - position:relative פה הוא מה שנותן ל-.combobox-list
+   הצפה (absolute) להתמקם בדיוק מתחת לתיבת החיפוש. */
 .combobox { position: relative; }
 .combobox-list {
   position: absolute; z-index: 20; top: calc(100% + 4px); right: 0; left: 0;
@@ -200,6 +215,8 @@ select, input[type="number"], input[type="text"] {
 .metric-pill span { font-size: 11px; color: var(--text-muted); }
 .metric-pill strong { font-size: 18px; font-variant-numeric: tabular-nums; }
 
+/* Chart.js צריך container עם גובה קבוע ו-‎position:relative כדי לצייר
+   canvas רספונסיבי נכון - זו העטיפה שכל תרשים בדשבורד יושב בתוכה. */
 .chart-box { position: relative; height: 280px; }
 
 @media (max-width: 640px) {

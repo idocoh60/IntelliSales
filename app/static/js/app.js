@@ -1,13 +1,23 @@
+// זה קובץ ה-‎JS היחיד של הדשבורד - כל הלוגיקה בצד לקוח (מעברי טאבים,
+// קריאות ל-‎API, מילוי הטפסים והצגת התוצאה, וכל בניית הגרפים עם
+// Chart.js) נמצאת כאן. ה-‎HTML (index.html) הוא רק השלד הסטטי.
+
 const MONTH_NAMES = ["ינואר","פברואר","מרץ","אפריל","מאי","יוני","יולי","אוגוסט","ספטמבר","אוקטובר","נובמבר","דצמבר"];
 
 let REFERENCE = null;
 let charts = {};
 
+// בוחר צבע קבוע מתוך משתני ה-‎CSS (--series-1..4) לפי אינדקס, כדי שכל
+// הגרפים באתר ישתמשו באותה פלטת צבעים עקבית.
 function seriesColor(i) {
   return getComputedStyle(document.documentElement).getPropertyValue(`--series-${(i % 4) + 1}`).trim();
 }
 
 // ---------- Tabs ----------
+// מעבר בין שלושת הטאבים (תחזית חדשה / ביצועי המודל / תובנות נתונים):
+// מסתירים הכל ומראים רק את הפאנל הרלוונטי. renderPerformanceTab/
+// renderInsightsTab נקראות רק בפעם הראשונה שנכנסים לטאב (ראו הדגלים
+// performanceRendered/insightsRendered למטה) כדי לא לטעון גרפים בחינם.
 document.querySelectorAll(".tab-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
@@ -20,6 +30,8 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
 });
 
 // ---------- Predict form ----------
+// טוען פעם אחת (בעליית הדף) את רשימות הסגמנטים והמוצרים מ-/api/reference
+// וממלא איתן את תפריט הסגמנט ואת תפריט החודשים (עם החודש הנוכחי כברירת מחדל).
 async function loadReference() {
   const res = await fetch("/api/reference");
   REFERENCE = await res.json();
@@ -52,6 +64,9 @@ async function loadReference() {
 const searchInput = document.getElementById("stockItemSearch");
 const dropdown = document.getElementById("productDropdown");
 
+// מציירת מחדש את רשימת המוצרים בתיבת החיפוש: מסננת לפי מה שהוקלד,
+// מקבצת לפי קטגוריה, ומצמידה לכל פריט מאזין click שממלא בבת אחת גם
+// את שדה ה-‎ID החבוי וגם את שדה המחיר (כדי שהמשתמש לא יצטרך למלא לבד).
 function renderProductDropdown(query) {
   const q = query.trim().toLowerCase();
   // Empty query -> browse the full catalog (grouped by category so 227
@@ -101,6 +116,9 @@ document.addEventListener("click", (e) => {
   if (!e.target.closest(".combobox")) dropdown.hidden = true;
 });
 
+// לחיצה על "חשב תחזית": אוספים את ערכי הטופס, קוראים ל-/api/predict,
+// ומעבירים את התוצאה ל-‎renderResult שמציגה אותה. disabled+textContent
+// על הכפתור זה רק פידבק ויזואלי שהבקשה בעיצומה.
 document.getElementById("predictBtn").addEventListener("click", async () => {
   const errorEl = document.getElementById("formError");
   errorEl.textContent = "";
@@ -141,6 +159,8 @@ document.getElementById("predictBtn").addEventListener("click", async () => {
   }
 });
 
+// "תחזית חדשה": פשוט מנקה את כל שדות הטופס ואת כרטיס התוצאה, כדי
+// שאפשר יהיה למלא תצפית הבאה בלי לרענן את כל הדף.
 document.getElementById("resetBtn").addEventListener("click", () => {
   document.getElementById("resultCard").hidden = true;
   document.getElementById("customerCategory").selectedIndex = 0;
@@ -155,6 +175,9 @@ document.getElementById("resetBtn").addEventListener("click", () => {
   searchInput.focus();
 });
 
+// ממלאת את כל כרטיס התוצאה עם מה שהתקבל מ-/api/predict: ההסתברות מול
+// הממוצע ההיסטורי, הכמות המומלצת, ההנחה האופטימלית וגרף העקומה שלה,
+// והמלצת ה-‎cross-sell. נקראת פעם אחת בכל predict מוצלח.
 function renderResult(data) {
   document.getElementById("resultCard").hidden = false;
 
@@ -178,6 +201,8 @@ function renderResult(data) {
   document.getElementById("discountDecisionBadge").innerHTML =
     `<span class="badge ${rec.close_deal ? "yes" : "no"}">${rec.close_deal ? "לסגור עסקה" : "דורש אישור מנהל"}</span>`;
 
+  // מציירים את עקומת "הסתברות מול הנחה" שחזרה מהשרת (rec.curve) - destroy
+  // קודם כדי לא להשאיר גרף ישן דרוס מתחת כשעושים תחזית שנייה על אותו canvas.
   if (charts.discountCurve) charts.discountCurve.destroy();
   charts.discountCurve = new Chart(document.getElementById("discountCurveChart"), {
     type: "line",
@@ -228,6 +253,9 @@ function renderResult(data) {
 // ---------- AI sales pitch (optional - needs OPENAI_API_KEY server-side) ----------
 let lastPredictionContext = null;
 
+// שולח את lastPredictionContext (בדיוק מה שכבר מוצג על המסך) ל-
+// /api/sales-pitch ומציג את הטקסט שחוזר. אם אין עדיין תחזית, אין מה
+// לשלוח - הכפתור לא אמור להיות זמין במצב הזה בכלל.
 document.getElementById("pitchBtn").addEventListener("click", async () => {
   const btn = document.getElementById("pitchBtn");
   const resultEl = document.getElementById("pitchResult");
@@ -259,6 +287,8 @@ document.getElementById("pitchBtn").addEventListener("click", async () => {
 });
 
 // ---------- Performance tab ----------
+// performanceRendered מוודא שהטאב הזה נבנה רק פעם אחת (בכניסה ראשונה
+// אליו) - אין טעם למשוך שוב את המטריקות ולצייר מחדש גרפים שלא משתנים.
 let performanceRendered = false;
 async function renderPerformanceTab() {
   if (performanceRendered) return;
@@ -277,6 +307,8 @@ async function renderPerformanceTab() {
   document.getElementById("metricMae").textContent = m.regressor.mae.toFixed(2);
   document.getElementById("metricMeanQty").textContent = m.regressor.mean_quantity.toFixed(1);
 
+  // מטריצת הבלבול (confusion matrix) כגרף עמודות מוערם - שתי עמודות
+  // (שלילי אמת/חיובי אמת) וכל אחת מפוצלת לחזוי-שלילי/חזוי-חיובי.
   const cm = m.classifier.confusion_matrix;
   charts.confusion = new Chart(document.getElementById("confusionChart"), {
     type: "bar",
@@ -290,6 +322,10 @@ async function renderPerformanceTab() {
     options: baseChartOptions({ stacked: true }),
   });
 
+  // עוזרת קטנה שחוסכת כפילות: בונה גרף עמודות אופקי מ-‎dict של
+  // {פיצ'ר: ערך} - עובד גם על feature_importance הרגיל וגם על
+  // permutation_importance (ששם הערך הוא {mean, std} ולא מספר בודד,
+  // isPermutation מבדיל בין השניים).
   function barChart(canvasId, importanceObj, isPermutation, colorIdx) {
     const labels = Object.keys(importanceObj);
     const values = isPermutation
@@ -315,6 +351,10 @@ async function renderPerformanceTab() {
     משמעות עסקית יוצא "מובהק סטטיסטית". ההסבר הסביר לממצא: זהות המוצר והמחיר כבר לוכדים בעקיפין את רוב המידע שסגמנט
     הלקוח היה תורם, כך שברגע שהמודל יודע מה נקנה ובאיזה מחיר - הסגמנט כמעט לא מוסיף מידע נוסף.`;
 
+  // מציג את תוצאות ה-‎ANOVA (eta squared / F / p-value) שחזרו מ-
+  // one_way_anova_eta_squared בשרת, ומצייר גרף עמודות של הממוצע בכל
+  // קבוצה - ה-‎zoom על ציר ה-‎Y (min/max לפי range*4) הוא מכוון: הוא
+  // מדגיש כמה כל העמודות בעצם דומות למרות שהגרף "מוגדל".
   function renderAnovaBlock(statsElId, chartId, check) {
     document.getElementById(statsElId).innerHTML = `
       <div class="metric-pill"><span>eta²</span><strong>${check.eta_squared.toExponential(2)}</strong></div>
@@ -346,6 +386,8 @@ async function renderPerformanceTab() {
 }
 
 // ---------- Insights tab ----------
+// חמישה גרפים סטטיים שכולם מגיעים מ-/api/charts (שהשרת כבר חישב מראש) -
+// הטאב הזה רק מציג נתונים, אין פה שום חישוב/מודל.
 let insightsRendered = false;
 async function renderInsightsTab() {
   if (insightsRendered) return;
@@ -418,6 +460,9 @@ async function renderInsightsTab() {
   });
 }
 
+// gridColor/textColor קוראים את הצבע הנוכחי ממשתני ה-‎CSS (--gridline,
+// --text-secondary) - ככה הגרפים מתאימים את עצמם אוטומטית למצב בהיר/כהה
+// בלי שצריך לכתוב שום לוגיקת theme בתוך קובץ ה-‎JS.
 function gridColor() {
   return getComputedStyle(document.documentElement).getPropertyValue("--gridline").trim();
 }
@@ -426,6 +471,8 @@ function textColor() {
   return getComputedStyle(document.documentElement).getPropertyValue("--text-secondary").trim();
 }
 
+// הגדרות ברירת מחדל משותפות לכל הגרפים (Chart.js) - כל גרף ספציפי
+// מרחיב את זה עם ...baseChartOptions({...}) ומוסיף רק מה שייחודי לו.
 function baseChartOptions({ stacked = false, indexAxis = "x" } = {}) {
   return {
     responsive: true,
@@ -441,4 +488,5 @@ function baseChartOptions({ stacked = false, indexAxis = "x" } = {}) {
   };
 }
 
+// נקודת הכניסה בפועל - הכל מתחיל מפה כשהדף נטען.
 loadReference();
